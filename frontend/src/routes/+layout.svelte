@@ -20,6 +20,9 @@
 	import Navigation from '$lib/components/Navigation.svelte';
 	import CardModal from '$lib/components/Modals/CardModal.svelte';
 	import SignInModal from '$lib/components/Modals/SignInModal.svelte';
+	import WithdrawModal from '$lib/components/Modals/WithdrawModal.svelte';
+	import CreateBasketModal from '$lib/components/Modals/CreateBasketModal.svelte';
+	import DepositModal from '$lib/components/Modals/DepositModal.svelte';
 
 	const t: ToastSettings = {
 		message: 'menu opened'
@@ -31,18 +34,26 @@
 	}
 
 	const modalComponentRegistry: Record<string, ModalComponent> = {
-		// Custom Modal 1
 		card: {
 			ref: CardModal
 		},
 		signIn: {
 			ref: SignInModal
+		},
+		withdraw: {
+			ref: WithdrawModal
+		},
+		deposit: {
+			ref: DepositModal
+		},
+		createBasket: {
+			ref: CreateBasketModal
 		}
 	};
 </script>
 
 <Toast position="br" />
-<Modal components={modalComponentRegistry} />
+<Modal width="w-full" components={modalComponentRegistry} />
 <Drawer>
 	<Navigation />
 </Drawer>
@@ -54,7 +65,7 @@
 				<a href="/"><strong class="text-4xl">Basket</strong></a></svelte:fragment
 			>
 			<!-- Slot: default -->
-			<div class=""><Navigation/></div>
+			<div class=""><Navigation /></div>
 			<svelte:fragment slot="trail">
 				<button class="md:hidden btn btn-sm" on:click={drawerOpen}>
 					<span>
@@ -66,12 +77,7 @@
 					</span>
 				</button>
 				<a href="/profile">
-					<Avatar
-						initials="JD"
-						background="bg-primary-500"
-						width="w-10"
-						class="hidden md:block"
-					/>
+					<Avatar initials="JD" background="bg-primary-500" width="w-10" class="hidden md:block" />
 				</a></svelte:fragment
 			>
 		</AppBar>

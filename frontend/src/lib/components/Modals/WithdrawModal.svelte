@@ -8,7 +8,8 @@
 
 {#if $modalStore[0]}
 	<button class="btn-icon variant-filled {cButton}" on:click={parent.onClose}>X</button>
-	<div class="card variant-filled-tertiary py-20 px-32">
-		<button class="btn variant-filled-primary font-bold">Sign In</button>
+	<div class="card flex flex-col items-center variant-filled-tertiary py-20 px-32">
+		<h1 class="pb-4 text-xl">{$modalStore[0].title}</h1>
+		<button class="btn variant-filled-primary font-bold">Withdraw</button>
 	</div>
 {/if}
