@@ -1,0 +1,108 @@
+{
+	"contracts": {
+		"Basket": "./contracts/Basket.cdc",
+		"Clock": "./contracts/lib/Clock.cdc",
+		"ExampleNFT": "./contracts/lib/ExampleNFT.cdc",
+		"FUSD": "./contracts/lib/FUSD.cdc",
+		"FlowToken": {
+			"source": "./contracts/lib/FlowToken.cdc",
+			"aliases": {
+				"emulator": "0ae53cb6e3f42a79",
+				"mainnet": "1654653399040a61",
+				"testnet": "7e60df042a9c0868"
+			}
+		},
+		"FungibleToken": {
+			"source": "./contracts/lib/FungibleToken.cdc",
+			"aliases": {
+				"emulator": "ee82856bf20e2aa6",
+				"mainnet": "f233dcee88fe0abe",
+				"testnet": "9a0766d93b6608b7"
+			}
+		},
+		"MetadataViews": {
+			"source": "./contracts/lib/MetadataViews.cdc",
+			"aliases": {
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
+			}
+		},
+		"NFTCatalog": {
+			"source": "./contracts/lib/NFTCatalog.cdc",
+			"aliases": {
+				"mainnet": "49a7cda3a1eecc29",
+				"testnet": "324c34e1c517e4db"
+			}
+		},
+		"NFTLoanAuction": "./contracts/NFTLoanAuction.cdc",
+		"NFTRetrieval": {
+			"source": "./contracts/lib/NFTRetrieval.cdc",
+			"aliases": {
+				"mainnet": "49a7cda3a1eecc29",
+				"testnet": "324c34e1c517e4db"
+			}
+		},
+		"NonFungibleToken": {
+			"source": "./contracts/lib/NonFungibleToken.cdc",
+			"aliases": {
+				"testnet": "631e88ae7f1d7c20"
+			}
+		},
+		"VaultNFT": "./contracts/VaultNFT.cdc",
+		"ViewResolver": {
+			"source": "./contracts/lib/ViewResolver.cdc",
+			"aliases": {
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
+			}
+		}
+	},
+	"networks": {
+		"emulator": "127.0.0.1:3569",
+		"mainnet": "access.mainnet.nodes.onflow.org:9000",
+		"testnet": "access.devnet.nodes.onflow.org:9000"
+	},
+	"accounts": {
+		"admin-account": {
+			"address": "01cf0e2f2f715450",
+			"key": "bda17f3a07e924c56f66e76a38246259f17b66c5f6233fd1db4c32ba8b1702b6"
+		},
+		"emulator-account": {
+			"address": "f8d6e0586b0a20c7",
+			"key": "fe8df2fe3a7b10252c3ad977eedf1e467a15ddec50a0ca2a4e9a3dd48ec50e74"
+		},
+		"testnet-admin": {
+			"address": "ca909b58fecc185a",
+			"key": {
+				"type": "file",
+				"location": "testnet-admin.pkey"
+			}
+		},
+		"user-account1": {
+			"address": "179b6b1cb6755e31",
+			"key": "c3c402f4b5ac76dd16b9d60de899c01e2d3c5ae153efdd2ca7fe91ad754abd73"
+		},
+		"user-account2": {
+			"address": "f3fcd2c1a78f5eee",
+			"key": "c89af7e50eb5c927e66d040a93e02a7a6ffbcd950ab9d6fcbea235f9217b4836"
+		}
+	},
+	"deployments": {
+		"emulator": {
+			"admin-account": [
+				"Basket"
+			],
+			"emulator-account": [
+				"NonFungibleToken",
+				"FUSD",
+				"MetadataViews",
+				"ViewResolver"
+			]
+		},
+		"testnet": {
+			"testnet-admin": [
+				"Basket"
+			]
+		}
+	}
+}

@@ -39,5 +39,10 @@
 		"vite": "^4.3.0",
 		"vitest": "^0.25.3"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@onflow/fcl": "^1.4.1",
+		"@onflow/typedefs": "^1.1.0",
+		"@onflow/types": "^1.1.0"
+	}
 }

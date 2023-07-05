@@ -23,6 +23,9 @@
 	import WithdrawModal from '$lib/components/Modals/WithdrawModal.svelte';
 	import CreateBasketModal from '$lib/components/Modals/CreateBasketModal.svelte';
 	import DepositModal from '$lib/components/Modals/DepositModal.svelte';
+	import { logIn, unauthenticate } from '$lib/flow/actions';
+	import { currentUser } from '@onflow/fcl';
+	import { user } from '$lib/flow/stores';
 
 	const t: ToastSettings = {
 		message: 'menu opened'
@@ -50,6 +53,8 @@
 			ref: CreateBasketModal
 		}
 	};
+
+	$: console.log($user);
 </script>
 
 <Toast position="br" />
@@ -77,7 +82,12 @@
 					</span>
 				</button>
 				<a href="/profile">
-					<Avatar initials="JD" background="bg-primary-500" width="w-10" class="hidden md:block" />
+					<Avatar initials="0x" background="bg-primary-500" width="w-10" class="hidden md:block" />
+					{#if $user.loggedIn}
+						<span class="hidden md:block" on:click={unauthenticate}>{$user.addr}</span>
+					{:else}
+						<span class="hidden md:block" on:click={logIn}>Sign In</span>
+					{/if}
 				</a></svelte:fragment
 			>
 		</AppBar>
