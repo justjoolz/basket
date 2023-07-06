@@ -49,9 +49,11 @@
 	<div class="flex flex-col p-4 gap-y-4 w-full">
 		<h4 class="h4 font-bold">FTs</h4>
 		{#each fts as ftCollection}
-			<div class="flex items-center justify-between border px-20 p-4">
-				<div class="flex items-center justify-center">
+			<div class="flex items-center border rounded-md p-4 px-20 gap-x-6">
+				<div class="flex items-center w-1/3">
 					<h4 class="h4 font-bold pr-3">{ftCollection.token}</h4>
+				</div>
+				<div class="flex w-1/3">
 					<p class="h4 font-bold pr-3">${ftCollection.balance}</p>
 				</div>
 				<button

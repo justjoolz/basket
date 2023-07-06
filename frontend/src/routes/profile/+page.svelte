@@ -33,7 +33,6 @@
 		};
 		modalStore.trigger(modal);
 	}
-
 	let tabSet: number = 0;
 	let walletNFTs: NFTCatalogEntry[];
 	let walletFTs: FTCatalogEntry[];
