@@ -99,7 +99,10 @@
 									>
 								</TabGroup>
 								<div class="ml-2 pt-2">
-									<button class="btn-icon variant-filled-primary">
+									<button
+										class="btn-icon variant-filled-primary"
+										on:click={modalComponentCreateBasket}
+									>
 										<span class="text-3xl !leading-none font-bold pb-[6px] pr-[2px]">+</span>
 									</button>
 								</div>
