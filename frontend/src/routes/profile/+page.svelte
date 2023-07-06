@@ -1,8 +1,16 @@
 <script lang="ts">
-	import { AppRail, AppRailTile, modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
-	import favicon from '$lib/assets/favicon.png';
+	import {
+		AppRail,
+		AppRailTile,
+		modalStore,
+		type ModalSettings,
+		TabGroup,
+		Tab
+	} from '@skeletonlabs/skeleton';
+	import basket from '$lib/assets/basket-icon.svg';
 	import { unauthenticate } from '@onflow/fcl';
 	import { dictionaryToArray, transactionStatus, user, usersNFTs } from '$lib/flow/stores';
+	import ContentDisplay from '$lib/components/ContentDisplay.svelte';
 
 	function modalComponentDeposit(): void {
 		const modal: ModalSettings = {
@@ -18,44 +26,29 @@
 		};
 		modalStore.trigger(modal);
 	}
-	function modalComponentWithdrawNft(id: string): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			title: `Withdraw NFT ${id}`,
-			component: 'withdraw'
-		};
-		modalStore.trigger(modal);
-	}
-	function modalComponentWithdrawFt(name: string) {
-		const modal: ModalSettings = {
-			type: 'component',
-			title: `Withdraw ${name}`,
-			component: 'withdraw'
-		};
-		modalStore.trigger(modal);
-	}
 
+	let tabSet: number = 0;
 	let vaults: NFTCatalogEntry[];
 	$: vaults = dictionaryToArray($usersNFTs);
-	let currentTile: number = 1;
-	$: currentVault = vaults[currentTile - 1];
-
-	$: console.log(vaults);
-	$: console.log(currentVault);
+	console.log(usersNFTs, 'usersNFTs');
 </script>
 
-<div class="container flex flex-col justify-center items-center">
+<div class="flex flex-col justify-center items-center">
 	<div class="flex flex-col justify-center items-center space-y-4 w-full">
-		<div class="pb-8 w-full">
-			<h1 class="text-6xl leading-none font-bold text-center pb-2">My Profile</h1>
+		<h1 class="text-6xl leading-none font-bold text-center pb-2">My Profile</h1>
+		<div class="flex justify-between pb-2 w-full">
 			{$transactionStatus}
-			{#if $user.loggedIn}<button
-					on:click={unauthenticate}
-					class="btn variant-filled-primary font-bold">Logout</button
-				>{/if}
+			<div class="flex gap-x-4 items-center">
+				<button class="btn variant-filled-primary font-bold" on:click={modalComponentCreateBasket}
+					>Create Empty Basket</button
+				>
+				<button class="btn variant-filled-primary font-bold" on:click={modalComponentDeposit}
+					>Deposit</button
+				>
+			</div>
 		</div>
 		<div class="flex w-full border">
-			<AppRail
+			<!-- <AppRail
 				border="border-r-2"
 				height="full"
 				width="w-32"
@@ -73,55 +66,59 @@
 						<span>{`Basket ${vault.id}`}</span>
 					</AppRailTile>
 				{/each}
-			</AppRail>
+			</AppRail> -->
 			<div class="flex flex-col items-center min-h-[60vh] w-full p-6">
 				<div class="w-full h-full">
-					<h4 class="h3 font-bold pb-6">Basket {currentTile}</h4>
-					<div class="flex w-full h-full pb-14">
-						<div class="flex flex-col p-4 gap-y-4 border w-1/2 h-full">
-							<h4 class="h4 font-bold">NFTs</h4>
-							<!-- {#each currentVault as nft}
-								<div class="flex items-center justify-between border p-4 px-20">
-									<div class="flex gap-x-4 items-center">
-										<img src={nft.image} alt={nft.name} class="block h-12 w-auto" />
-										<div class="flex flex-col items-center justify-center">
-											<h4 class="h4 font-bold pb-2">{nft.name}</h4>
-											<p>{nft.description}</p>
-										</div>
-									</div>
-									<button
-										class="btn variant-filled-primary font-bold ml-12"
-										on:click={() => modalComponentWithdrawNft(nft.id)}>Withdraw</button
-									>
-								</div>
-							{/each} -->
+					<div class="flex w-full">
+						<div class="w-1/2 border-r-2">
+							<h4 class="h3 font-bold pb-6 underline">My Wallet</h4>
+							<ContentDisplay currentVault={vaults} />
 						</div>
-						<div class="flex flex-col p-4 gap-y-4 border w-1/2 h-full">
-							<h4 class="h4 font-bold">FTs</h4>
-							<!-- {#each currentVault.fts as ft}
-								<div class="flex items-center justify-between border px-20 p-4">
-									<div class="flex items-center justify-center">
-										<h4 class="h4 font-bold pr-3">{ft.name}</h4>
-										<p class="h4 font-bold pr-3">${ft.qty}</p>
-									</div>
-									<button
-										class="btn variant-filled-primary font-bold ml-12"
-										on:click={() => modalComponentWithdrawFt(ft.name)}>Withdraw</button
+						<div class="w-1/2 flex flex-col pl-6">
+							<div class="flex">
+								<TabGroup>
+									<Tab bind:group={tabSet} name="tab1" value={0}>
+										<svelte:fragment slot="lead"
+											><div class="flex items-center gap-x-3">
+												<img src={basket} alt="" class="w-10 h-10" />
+												<p class="text-2xl font-bold">1</p>
+											</div></svelte:fragment
+										>
+									</Tab>
+									<Tab bind:group={tabSet} name="tab2" value={1}
+										><div class="flex items-center gap-x-3">
+											<img src={basket} alt="" class="w-10 h-10" />
+											<p class="text-2xl font-bold">2</p>
+										</div></Tab
 									>
+									<Tab bind:group={tabSet} name="tab3" value={2}
+										><div class="flex items-center gap-x-3">
+											<img src={basket} alt="" class="w-10 h-10" />
+											<p class="text-2xl font-bold">3</p>
+										</div></Tab
+									>
+								</TabGroup>
+								<div class="ml-2 pt-2">
+									<button class="btn-icon variant-filled-primary">
+										<span class="text-3xl !leading-none font-bold pb-[6px] pr-[2px]">+</span>
+									</button>
 								</div>
-							{/each} -->
+							</div>
+							<!-- Tab Panels --->
+							<div>
+								<ContentDisplay currentVault={vaults} />
+								{#if tabSet === 0}
+									(Basket 1 contents)
+								{:else if tabSet === 1}
+									(Basket 2 contents)
+								{:else if tabSet === 2}
+									(Basket 3 contents)
+								{/if}
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="flex gap-x-4 items-center">
-			<button class="btn variant-filled-primary font-bold" on:click={modalComponentCreateBasket}
-				>Create Empty Basket</button
-			>
-			<button class="btn variant-filled-primary font-bold" on:click={modalComponentDeposit}
-				>Deposit</button
-			>
 		</div>
 	</div>
 </div>

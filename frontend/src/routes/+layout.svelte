@@ -67,7 +67,9 @@
 	<svelte:fragment slot="header"
 		><AppBar padding="px-10 py-6">
 			<svelte:fragment slot="lead">
-				<a href="/"><strong class="text-4xl">Basket</strong></a></svelte:fragment
+				<a href="/" class="flex items-start justify-start"
+					><strong class="text-4xl !leading-8">Basket</strong></a
+				></svelte:fragment
 			>
 			<!-- Slot: default -->
 			<div class=""><Navigation /></div>
@@ -81,22 +83,26 @@
 						</svg>
 					</span>
 				</button>
-				<a href="/profile">
-					<Avatar initials="0x" background="bg-primary-500" width="w-10" class="hidden md:block" />
-					{#if $user.loggedIn}
-						<span class="hidden md:block" on:click={unauthenticate}>{$user.addr}</span>
-					{:else}
-						<span class="hidden md:block" on:click={logIn}>Sign In</span>
-					{/if}
-				</a></svelte:fragment
-			>
+				{#if $user.loggedIn}
+					<a href="/profile">
+						<button class="hidden md:block btn variant-filled-primary font-bold">Profile</button></a
+					><button
+						class="hidden md:block btn variant-filled-primary font-bold"
+						on:click={unauthenticate}>Log Out</button
+					>
+				{:else}
+					<button class="hidden md:block btn variant-filled-primary font-bold" on:click={logIn}
+						>Log In</button
+					>
+				{/if}
+			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
 	<!-- (sidebarLeft) -->
 	<!-- (sidebarRight) -->
 	<!-- (pageHeader) -->
 	<!-- Router Slot -->
-	<div class="container p-10 mx-auto">
+	<div class="px-10 w-full">
 		<slot />
 	</div>
 	<!-- ---- / ---- -->
