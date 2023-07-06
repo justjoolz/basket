@@ -16,7 +16,9 @@ export function dictionaryToArray(dictionary: any) {
 	return Object.keys(dictionary).map((key) => dictionary[key]) as NFTCatalogEntry[];
 }
 export function ftDictionaryToArray(dictionary: any) {
-	return Object.keys(dictionary).map((key) => dictionary[key]) as FTCatalogEntry[];
+	const objectArray = Object.keys(dictionary).map((key) => dictionary[key]) as FTCatalogEntry[];
+	const fitleredArray = objectArray.filter((item) => item.balance > 0);
+	return fitleredArray;
 }
 
 export const getFTs = () => {
