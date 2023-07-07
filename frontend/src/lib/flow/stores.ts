@@ -8,6 +8,7 @@ export const usersNFTs = writable({} as NFTCatalogEntries);
 export const ftTokens = writable({} as TokenInfo[]);
 export const usersFTs = writable({} as { token: string; balance: number }[]);
 export const usersBasketIds = writable({} as number[]);
+export const selectedBasketMeta = writable({} as NFTCatalogEntry);
 
 export const transactionStatus = writable();
 export const walletContents = writable();

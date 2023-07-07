@@ -1,6 +1,6 @@
 import * as fcl from "@onflow/fcl";
 import "./config";
-import { user, transactionStatus, usersNFTs, usersFTs, ftTokens, usersBasketIds } from './stores';
+import { user, transactionStatus, usersNFTs, usersFTs, ftTokens, usersBasketIds, selectedBasketMeta } from './stores';
 import { GET_ALL_NFTS_IN_ACCOUNT_SCRIPT } from "./scripts";
 import type { CurrentUser } from "@onflow/fcl/types/current-user";
 import { CREATE_BASKET } from "./txs/createBasket";
@@ -82,18 +82,17 @@ export const getBaskets = async (addr: String) => {
 }
 
 
-export const getNFTMetadata = async (addr: String, nftId: String) => {
+export const getBasketMetadata = async (addr: String, nftId: String) => {
     if (!addr) { return }
-    transactionStatus.set(`Reading your NFT metadata... ${addr} - ${nftId}`);
+    transactionStatus.set(`Reading your Basket metadata... ${addr} - ${nftId}`);
 
     try {
-        const basketIds = await fcl.query({
+        const basketMeta = await fcl.query({
             cadence: GET_BASKET_METADATA,
             args: (arg, t) => [arg(addr, t.Address), arg(nftId, t.UInt64)]
         })
 
-        console.log({ basketIds })
-
+        selectedBasketMeta.set(basketMeta)
         // usersNFTs.set(nfts ?? 'No NFTs found');
         transactionStatus.set('Baskets loaded.')
 

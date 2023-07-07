@@ -16,7 +16,8 @@
 		usersNFTs,
 		usersFTs,
 		ftDictionaryToArray,
-		usersBasketIds
+		usersBasketIds,
+		selectedBasketMeta
 	} from '$lib/flow/stores';
 	import ContentDisplay from '$lib/components/ContentDisplay.svelte';
 
@@ -113,9 +114,10 @@
 							</div>
 							<!-- Tab Panels --->
 							<div>
+								<!-- <ContentDisplay currentVault={$selectedBasketMeta} /> -->
+
 								<!-- {#each basketCollection as basket}
 									{#if tabSet === basket.position}
-										<ContentDisplay currentVault={basketCollection} />
 									{/if}
 								{/each} -->
 							</div>
