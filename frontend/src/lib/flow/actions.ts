@@ -7,11 +7,12 @@ import { CREATE_BASKET } from "./txs/createBasket";
 import { TokenListProvider, type TokenInfo } from "flow-native-token-registry";
 import { get } from "svelte/store";
 import { GET_ACCOUNT_STORAGE_DETAILS } from "./scripts/get_account_storage_details";
+import { GET_BASKETS } from "./scripts/get_baskets";
+import { GET_BASKET_METADATA } from "./scripts/get_nft_metadata";
 
 // set Svelte $user store to currentUser, 
 // so other components can access it
-fcl.currentUser.subscribe(user.set)
-// fcl.currentUser.subscribe((data: CurrentUser) => user.set(data))
+fcl.currentUser.subscribe((data: CurrentUser) => user.set(data))
 
 // Lifecycle FCL Auth functions
 export const unauthenticate = () => fcl.unauthenticate()
@@ -59,6 +60,49 @@ export const getAccountStorageDetails = async (addr: String) => {
     }
 }
 
+export const getBaskets = async (addr: String) => {
+    if (!addr) { return }
+    transactionStatus.set('Reading your baskets...');
+
+    try {
+        const baketIds = await fcl.query({
+            cadence: GET_BASKETS,
+            args: (arg, t) => [arg(addr, t.Address)]
+        })
+
+        console.log({ baketIds })
+
+        // usersNFTs.set(nfts ?? 'No NFTs found');
+        transactionStatus.set('Baskets loaded.')
+
+    } catch (e) {
+        transactionStatus.set(e)
+        console.log(e);
+    }
+}
+
+
+export const getNFTMetadata = async (addr: String, nftId: String) => {
+    if (!addr) { return }
+    transactionStatus.set(`Reading your NFT metadata... ${addr} - ${nftId}`);
+
+    try {
+        const baketIds = await fcl.query({
+            cadence: GET_BASKET_METADATA,
+            args: (arg, t) => [arg(addr, t.Address), arg(nftId, t.UInt64)]
+        })
+
+        console.log({ baketIds })
+
+        // usersNFTs.set(nfts ?? 'No NFTs found');
+        transactionStatus.set('Baskets loaded.')
+
+    } catch (e) {
+        transactionStatus.set(e)
+        console.log(e);
+    }
+}
+
 
 function fetchTokenBalances(tokens: TokenInfo[]) {
     if (!tokens.length) return
@@ -89,7 +133,7 @@ export const createEmptyBasket = async () => {
             transactionStatus.set(res.status)
             console.log({ res })
         })
-        transactionStatus.set('Basket created succesfully!')
+        transactionStatus.set('Create basket tx sent!')
 
     } catch (e) {
         transactionStatus.set(e)

@@ -13,7 +13,7 @@ export const walletContents = writable();
 export const basket = writable();
 
 export function dictionaryToArray(dictionary: any) {
-	return Object.keys(dictionary).map((key) => dictionary[key]) as NFTCatalogEntry[];
+	return Object.keys(dictionary).map((key) => dictionary[key]) as NFTCatalogEntry[][];
 }
 export function ftDictionaryToArray(dictionary: any) {
 	const objectArray = Object.keys(dictionary).map((key) => dictionary[key]) as FTCatalogEntry[];
