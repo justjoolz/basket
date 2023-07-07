@@ -39,6 +39,32 @@
 	$: walletNFTs = dictionaryToArray($usersNFTs);
 	$: walletFTs = ftDictionaryToArray($usersFTs);
 	let basketCollection: any[] = [];
+
+	function modalComponentWithdrawNft(id: string): void {
+		const modal: ModalSettings = {
+			type: 'component',
+			title: `Withdraw NFT ${id}`,
+			component: 'withdraw'
+		};
+		modalStore.trigger(modal);
+	}
+	function modalComponentWithdrawFt(name: string) {
+		const modal: ModalSettings = {
+			type: 'component',
+			title: `Withdraw ${name}`,
+			component: 'withdraw'
+		};
+		modalStore.trigger(modal);
+	}
+
+	let vaults: NFTCatalogEntry[];
+	$: vaults = dictionaryToArray($usersNFTs);
+	let currentTile: number = 1;
+	$: currentVault = vaults[currentTile - 1];
+
+	// $: console.log(vaults);
+	// $: console.log(currentVault);
+
 </script>
 
 <div class="flex flex-col justify-center items-center">
