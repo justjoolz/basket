@@ -28,7 +28,7 @@
 		<h4 class="h4 font-bold">NFTs</h4>
 		{#each nfts as nftCollection}
 			<div class="flex flex-col border p-4 gap-y-2">
-				<p class="h3 font-bold">{nftCollection[0].collectionName}</p>
+				<p class="h3 font-bold">{nftCollection[0]?.collectionName}</p>
 				{#each nftCollection as nft}
 					<div class="flex items-center border rounded-md p-4 px-20 gap-x-6">
 						<div class="flex gap-x-4 items-center w-1/3">

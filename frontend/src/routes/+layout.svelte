@@ -83,7 +83,9 @@
 				</button>
 				{#if $user.loggedIn}
 					<a href="/profile">
-						<button class="hidden md:block btn variant-filled-primary font-bold">Profile</button></a
+						<button class="hidden md:block btn variant-filled-primary font-bold"
+							>{$user.addr}</button
+						></a
 					><button
 						class="hidden md:block btn variant-filled-primary font-bold"
 						on:click={unauthenticate}>Log Out</button

@@ -16,7 +16,9 @@
 		user,
 		usersNFTs,
 		usersFTs,
-		ftDictionaryToArray
+		ftDictionaryToArray,
+		usersBasketIds,
+		selectedBasketMeta
 	} from '$lib/flow/stores';
 	import ContentDisplay from '$lib/components/ContentDisplay.svelte';
 
@@ -88,25 +90,6 @@
 			</div>
 		</div>
 		<div class="flex w-full border">
-			<!-- <AppRail
-				border="border-r-2"
-				height="full"
-				width="w-32"
-				background="bg-tertiary-100-800-token"
-				active="bg-secondary-active-token"
-			>
-				{#each vaults as vault}
-					<AppRailTile
-						bind:group={currentTile}
-						name={`${vault.collectionName}`}
-						value={vault.id}
-						title={`${vault.collectionDescription}`}
-					>
-						<svelte:fragment slot="lead">(icon)</svelte:fragment>
-						<span>{`Basket ${vault.id}`}</span>
-					</AppRailTile>
-				{/each}
-			</AppRail> -->
 			<div class="flex flex-col items-center min-h-[60vh] w-full p-6">
 				<div class="w-full h-full">
 					<div class="flex w-full">
@@ -117,12 +100,12 @@
 						<div class="w-1/2 flex flex-col pl-6">
 							<div class="flex">
 								<TabGroup>
-									{#each basketCollection as basket}
-										<Tab bind:group={tabSet} name="tab1" value={basket.indexOf}>
+									{#each $usersBasketIds as basket}
+										<Tab bind:group={tabSet} name="tab1" value={basket}>
 											<svelte:fragment
 												><div class="flex items-center gap-x-3">
 													<img src={basketIcon} alt="" class="w-10 h-10" />
-													<p class="text-2xl font-bold">{basket.indexOf}</p>
+													<p class="text-2xl font-bold">{basket}</p>
 												</div></svelte:fragment
 											>
 										</Tab>
@@ -139,9 +122,10 @@
 							</div>
 							<!-- Tab Panels --->
 							<div>
+								<!-- <ContentDisplay currentVault={$selectedBasketMeta} /> -->
+
 								<!-- {#each basketCollection as basket}
 									{#if tabSet === basket.position}
-										<ContentDisplay currentVault={basket} />
 									{/if}
 								{/each} -->
 							</div>

@@ -1,17 +1,18 @@
 import * as fcl from "@onflow/fcl";
 import "./config";
-import { user, transactionStatus, usersNFTs, usersFTs, ftTokens } from './stores';
+import { user, transactionStatus, usersNFTs, usersFTs, ftTokens, usersBasketIds, selectedBasketMeta } from './stores';
 import { GET_ALL_NFTS_IN_ACCOUNT_SCRIPT } from "./scripts";
 import type { CurrentUser } from "@onflow/fcl/types/current-user";
 import { CREATE_BASKET } from "./txs/createBasket";
 import { TokenListProvider, type TokenInfo } from "flow-native-token-registry";
 import { get } from "svelte/store";
 import { GET_ACCOUNT_STORAGE_DETAILS } from "./scripts/get_account_storage_details";
+import { GET_BASKETS } from "./scripts/get_baskets";
+import { GET_BASKET_METADATA } from "./scripts/get_nft_metadata";
 
 // set Svelte $user store to currentUser, 
 // so other components can access it
-fcl.currentUser.subscribe(user.set)
-// fcl.currentUser.subscribe((data: CurrentUser) => user.set(data))
+fcl.currentUser.subscribe((data: CurrentUser) => user.set(data))
 
 // Lifecycle FCL Auth functions
 export const unauthenticate = () => fcl.unauthenticate()
@@ -59,6 +60,48 @@ export const getAccountStorageDetails = async (addr: String) => {
     }
 }
 
+export const getBaskets = async (addr: String) => {
+    if (!addr) { return }
+    transactionStatus.set('Reading your baskets...');
+
+    try {
+        const basketIds = await fcl.query({
+            cadence: GET_BASKETS,
+            args: (arg, t) => [arg(addr, t.Address)]
+        })
+
+        console.log({ basketIds })
+
+        transactionStatus.set('Baskets loaded.')
+        usersBasketIds.set(basketIds)
+
+    } catch (e) {
+        transactionStatus.set(e)
+        console.log(e);
+    }
+}
+
+
+export const getBasketMetadata = async (addr: String, nftId: String) => {
+    if (!addr) { return }
+    transactionStatus.set(`Reading your Basket metadata... ${addr} - ${nftId}`);
+
+    try {
+        const basketMeta = await fcl.query({
+            cadence: GET_BASKET_METADATA,
+            args: (arg, t) => [arg(addr, t.Address), arg(nftId, t.UInt64)]
+        })
+
+        selectedBasketMeta.set(basketMeta)
+        // usersNFTs.set(nfts ?? 'No NFTs found');
+        transactionStatus.set('Baskets loaded.')
+
+    } catch (e) {
+        transactionStatus.set(e)
+        console.log(e);
+    }
+}
+
 
 function fetchTokenBalances(tokens: TokenInfo[]) {
     if (!tokens.length) return
@@ -85,12 +128,10 @@ export const createEmptyBasket = async () => {
             cadence: CREATE_BASKET,
         })
 
-        fcl.tx(txId).subscribe(res => {
-            transactionStatus.set(res.status)
-            console.log({ res })
+        fcl.tx(txId).onceSealed().then(res => {
+            transactionStatus.set('Basket created!')
+            getBaskets(get(user).addr ?? '')
         })
-        transactionStatus.set('Basket created succesfully!')
-
     } catch (e) {
         transactionStatus.set(e)
         console.log(e);
@@ -308,6 +349,7 @@ user.subscribe((value) => {
     console.log('fetching nfts for currentUser', usersAddress);
     getUsersNFTs(usersAddress);
     getFTs();
+    getBaskets(usersAddress);
 });
 
 ftTokens.subscribe((value) => {
