@@ -5,7 +5,8 @@
 		modalStore,
 		type ModalSettings,
 		TabGroup,
-		Tab
+		Tab,
+		toastStore
 	} from '@skeletonlabs/skeleton';
 	import basketIcon from '$lib/assets/basket-icon.svg';
 
@@ -33,11 +34,20 @@
 		};
 		modalStore.trigger(modal);
 	}
+	function transactionStatusToast(transactionStatus: string): void {
+		const t = {
+			message: transactionStatus,
+			background: 'variant-filled-success'
+		};
+		toastStore.trigger(t);
+	}
+
 	let tabSet: number = 0;
-	let walletNFTs: NFTCatalogEntry[];
+	let walletNFTs: NFTCatalogEntry[][];
 	let walletFTs: FTCatalogEntry[];
 	$: walletNFTs = dictionaryToArray($usersNFTs);
 	$: walletFTs = ftDictionaryToArray($usersFTs);
+	$: transactionStatusToast($transactionStatus as string);
 	let basketCollection: any[] = [];
 
 	function modalComponentWithdrawNft(id: string): void {
@@ -57,14 +67,10 @@
 		modalStore.trigger(modal);
 	}
 
-	let vaults: NFTCatalogEntry[];
+	let vaults: NFTCatalogEntry[][];
 	$: vaults = dictionaryToArray($usersNFTs);
 	let currentTile: number = 1;
 	$: currentVault = vaults[currentTile - 1];
-
-	// $: console.log(vaults);
-	// $: console.log(currentVault);
-
 </script>
 
 <div class="flex flex-col justify-center items-center">

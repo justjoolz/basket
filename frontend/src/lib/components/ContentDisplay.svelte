@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 
-	export let nfts: NFTCatalogEntry[];
+	export let nfts: NFTCatalogEntry[][];
 	export let fts: FTCatalogEntry[];
 	function modalComponentWithdrawNft(id: string): void {
 		const modal: ModalSettings = {
@@ -39,7 +39,7 @@
 						</div>
 						<button
 							class="btn variant-filled-primary font-bold ml-12"
-							on:click={() => modalComponentWithdrawNft(nft.id)}>Withdraw</button
+							on:click={() => modalComponentWithdrawNft(nft.id)}>Deposit </button
 						>
 					</div>
 				{/each}
