@@ -63,10 +63,6 @@
 		"testnet": "access.devnet.nodes.onflow.org:9000"
 	},
 	"accounts": {
-		"admin-account": {
-			"address": "01cf0e2f2f715450",
-			"key": "bda17f3a07e924c56f66e76a38246259f17b66c5f6233fd1db4c32ba8b1702b6"
-		},
 		"emulator-account": {
 			"address": "f8d6e0586b0a20c7",
 			"key": "fe8df2fe3a7b10252c3ad977eedf1e467a15ddec50a0ca2a4e9a3dd48ec50e74"
@@ -89,14 +85,12 @@
 	},
 	"deployments": {
 		"emulator": {
-			"admin-account": [
-				"Basket"
-			],
 			"emulator-account": [
 				"NonFungibleToken",
 				"FUSD",
 				"MetadataViews",
-				"ViewResolver"
+				"ViewResolver",
+				"Basket"
 			]
 		},
 		"testnet": {

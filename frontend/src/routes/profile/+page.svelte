@@ -40,8 +40,8 @@
 	let currentTile: number = 1;
 	$: currentVault = vaults[currentTile - 1];
 
-	$: console.log(vaults);
-	$: console.log(currentVault);
+	// $: console.log(vaults);
+	// $: console.log(currentVault);
 </script>
 
 <div class="container flex flex-col justify-center items-center">

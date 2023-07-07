@@ -16,10 +16,3 @@ export function dictionaryToArray(dictionary: any) {
     return Object.keys(dictionary).map((key) => dictionary[key]) as NFTCatalogEntry[];
 }
 
-export const getFTs = () => {
-    new TokenListProvider().resolve().then((tokens) => {
-        const tokenList = tokens.getList();
-        console.log('token list', { tokenList });
-        ftTokens.set(tokenList);
-    });
-} 

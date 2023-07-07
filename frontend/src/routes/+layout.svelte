@@ -53,8 +53,6 @@
 			ref: CreateBasketModal
 		}
 	};
-
-	$: console.log($user);
 </script>
 
 <Toast position="br" />
