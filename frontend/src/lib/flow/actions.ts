@@ -1,6 +1,6 @@
 import * as fcl from "@onflow/fcl";
 import "./config";
-import { user, transactionStatus, usersNFTs, usersFTs, ftTokens } from './stores';
+import { user, transactionStatus, usersNFTs, usersFTs, ftTokens, usersBasketIds } from './stores';
 import { GET_ALL_NFTS_IN_ACCOUNT_SCRIPT } from "./scripts";
 import type { CurrentUser } from "@onflow/fcl/types/current-user";
 import { CREATE_BASKET } from "./txs/createBasket";
@@ -65,15 +65,15 @@ export const getBaskets = async (addr: String) => {
     transactionStatus.set('Reading your baskets...');
 
     try {
-        const baketIds = await fcl.query({
+        const basketIds = await fcl.query({
             cadence: GET_BASKETS,
             args: (arg, t) => [arg(addr, t.Address)]
         })
 
-        console.log({ baketIds })
+        console.log({ basketIds })
 
-        // usersNFTs.set(nfts ?? 'No NFTs found');
         transactionStatus.set('Baskets loaded.')
+        usersBasketIds.set(basketIds)
 
     } catch (e) {
         transactionStatus.set(e)
@@ -87,12 +87,12 @@ export const getNFTMetadata = async (addr: String, nftId: String) => {
     transactionStatus.set(`Reading your NFT metadata... ${addr} - ${nftId}`);
 
     try {
-        const baketIds = await fcl.query({
+        const basketIds = await fcl.query({
             cadence: GET_BASKET_METADATA,
             args: (arg, t) => [arg(addr, t.Address), arg(nftId, t.UInt64)]
         })
 
-        console.log({ baketIds })
+        console.log({ basketIds })
 
         // usersNFTs.set(nfts ?? 'No NFTs found');
         transactionStatus.set('Baskets loaded.')
@@ -129,12 +129,10 @@ export const createEmptyBasket = async () => {
             cadence: CREATE_BASKET,
         })
 
-        fcl.tx(txId).subscribe(res => {
-            transactionStatus.set(res.status)
-            console.log({ res })
+        fcl.tx(txId).onceSealed().then(res => {
+            transactionStatus.set('Basket created!')
+            getBaskets(get(user).addr ?? '')
         })
-        transactionStatus.set('Create basket tx sent!')
-
     } catch (e) {
         transactionStatus.set(e)
         console.log(e);
@@ -352,6 +350,7 @@ user.subscribe((value) => {
     console.log('fetching nfts for currentUser', usersAddress);
     getUsersNFTs(usersAddress);
     getFTs();
+    getBaskets(usersAddress);
 });
 
 ftTokens.subscribe((value) => {
