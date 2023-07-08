@@ -47,6 +47,7 @@
 	let tabSet: number = 0;
 	let walletNFTs: NFTCatalogEntry[][];
 	let walletFTs: FTCatalogEntry[];
+	let userBaskets: NFTCatalogEntry[][] = [];
 	$: walletNFTs = dictionaryToArray($usersNFTs);
 	$: walletFTs = ftDictionaryToArray($usersFTs);
 	$: transactionStatusToast($transactionStatus as string);
@@ -68,6 +69,14 @@
 		};
 		modalStore.trigger(modal);
 	}
+	function modalComponentTrade(name: string) {
+		const modal: ModalSettings = {
+			type: 'component',
+			title: `Withdraw ${name}`,
+			component: 'withdraw'
+		};
+		modalStore.trigger(modal);
+	}
 
 	let vaults: NFTCatalogEntry[][];
 	$: vaults = dictionaryToArray($usersNFTs);
@@ -75,9 +84,9 @@
 	$: currentVault = vaults[currentTile - 1];
 </script>
 
-<div class="flex flex-col justify-center items-center">
+<div class="flexColumnCenter">
+	<p class="text-[64px] leading-[160px] py-6 hero-text-outline">My Profile</p>
 	<div class="flex flex-col justify-center items-center space-y-4 w-full">
-		<h1 class="text-6xl leading-none font-bold text-center pb-2">My Profile</h1>
 		<div class="flex justify-between pb-2 w-full">
 			{$transactionStatus}
 			<div class="flex gap-x-4 items-center">
@@ -89,7 +98,7 @@
 				>
 			</div>
 		</div>
-		<div class="flex w-full border">
+		<div class="flex flex-col w-full border">
 			<div class="flex flex-col items-center min-h-[60vh] w-full p-6">
 				<div class="w-full h-full">
 					<div class="flex w-full">
@@ -100,7 +109,7 @@
 						<div class="w-1/2 flex flex-col pl-6">
 							<div class="flex">
 								<TabGroup>
-									{#each $usersBasketIds as basket}
+									<!-- {#each $usersBasketIds as basket}
 										<Tab bind:group={tabSet} name="tab1" value={basket}>
 											<svelte:fragment
 												><div class="flex items-center gap-x-3">
@@ -109,7 +118,7 @@
 												</div></svelte:fragment
 											>
 										</Tab>
-									{/each}
+									{/each} -->
 								</TabGroup>
 								<div class="ml-2 pt-2">
 									<button
@@ -132,6 +141,13 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="flex w-full justify-center items-center pb-6">
+				<button
+					class="btn variant-filled-primary font-bold"
+					on:click={() => modalComponentTrade('nfts')}
+					>Trade
+				</button>
 			</div>
 		</div>
 	</div>

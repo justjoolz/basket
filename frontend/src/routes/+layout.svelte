@@ -63,7 +63,7 @@
 
 <AppShell>
 	<svelte:fragment slot="header"
-		><AppBar padding="px-10 py-6">
+		><AppBar padding="px-12 py-4 nav-shadow">
 			<svelte:fragment slot="lead">
 				<a href="/" class="flex items-start justify-start"
 					><strong class="text-4xl !leading-8">Basket</strong></a
@@ -83,17 +83,17 @@
 				</button>
 				{#if $user.loggedIn}
 					<a href="/profile">
-						<button class="hidden md:block btn variant-filled-primary font-bold"
+						<button class="hidden md:block btn text-lg hover:variant-ringed-primary"
 							>{$user.addr}</button
 						></a
 					><button
-						class="hidden md:block btn variant-filled-primary font-bold"
+						class="hidden md:block text-lg btn hover:variant-ringed-primary"
 						on:click={unauthenticate}>Log Out</button
 					>
 				{:else}
-					<button class="hidden md:block btn variant-filled-primary font-bold" on:click={logIn}
-						>Log In</button
-					>
+					<button class="hidden md:block btn text-lg hover:variant-ringed-primary" on:click={logIn}
+						>Log In
+					</button>
 				{/if}
 			</svelte:fragment>
 		</AppBar>
@@ -102,7 +102,7 @@
 	<!-- (sidebarRight) -->
 	<!-- (pageHeader) -->
 	<!-- Router Slot -->
-	<div class="px-10 w-full">
+	<div class="w-full">
 		<slot />
 	</div>
 	<!-- ---- / ---- -->

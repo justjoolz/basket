@@ -1,5 +1,140 @@
 /*place global styles here */
+@font-face {
+	font-family: 'B5Sans';
+	src: url('/fonts/TheSans-B5Plain.otf');
+}
+@font-face {
+	font-family: 'B6Sans';
+	src: url('/fonts/TheSans-B6SemiBold.otf');
+}
+@font-face {
+	font-family: 'B7Sans';
+	src: url('/fonts/TheSans-B7Bold.otf');
+}
+@font-face {
+	font-family: 'B9Sans';
+	src: url('/fonts/TheSans-B9Black.otf');
+}
+@font-face {
+	font-family: 'neon';
+	src: url('/fonts/PolandCanIntoBigWritingsOutline-B9RV.otf');
+}
 html,
 body {
 	@apply h-full overflow-hidden;
+}
+.font-b5 {
+	@apply font-[B5Sans];
+}
+.font-b6 {
+	@apply font-[B6Sans];
+}
+.font-b7 {
+	@apply font-[B7Sans];
+}
+.font-b9 {
+	@apply font-[B9Sans];
+}
+.font-neon {
+	@apply font-[neon];
+}
+.flexColumnCenter {
+	@apply flex flex-col justify-center items-center;
+}
+.flexRowCenter {
+	@apply flex justify-center items-center;
+}
+.gridDisplay {
+	@apply w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3;
+}
+.gridDisplay2 {
+	@apply w-full grid grid-cols-1 md:grid-cols-2;
+}
+.hoverShadow {
+	@apply hover:scale-[101%] transition-all duration-300 hover:shadow-[0_2px_10px_-2.5px] hover:shadow-primary-600;
+}
+.hero-back {
+	@apply min-h-[94vh] bg-no-repeat bg-cover bg-center bg-surface-500 bg-[url('$lib/assets/home-hero-image.jpg')];
+}
+.info-back {
+	@apply min-h-[94vh] bg-no-repeat bg-cover bg-center bg-surface-500;
+}
+.nav-shadow {
+	box-shadow: 0 0px 12px 5px rgba(0, 0, 0, 0.5);
+}
+.hero-text-outline {
+	@apply font-neon tracking-wide text-[#21ebff];
+	text-shadow: 0px 0px 10px #21ebff;
+}
+.custom-btn {
+	font-family: 'B7Sans';
+	color: #fff;
+	width: 200px;
+	height: 60px;
+	padding: 10px 25px;
+	background: transparent;
+	transition: all 0.3s ease;
+	position: relative;
+	display: inline-block;
+}
+.btn-7 {
+	line-height: 60px;
+	padding: 0;
+	border: none;
+}
+.btn-7 span {
+	font-family: 'B7Sans';
+	font-size: 22px;
+	position: relative;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+.btn-7:before,
+.btn-7:after {
+	position: absolute;
+	content: '';
+	right: 0;
+	bottom: 0;
+	background: #21ebff;
+	box-shadow: 0 0 5px #21ebff;
+	transition: all 0.3s ease;
+}
+.btn-7:before {
+	height: 50%;
+	width: 2px;
+}
+.btn-7:after {
+	width: 20%;
+	height: 2px;
+}
+.btn-7:hover:before {
+	height: 100%;
+}
+.btn-7:hover:after {
+	width: 100%;
+}
+.btn-7 span:before,
+.btn-7 span:after {
+	position: absolute;
+	content: '';
+	left: 0;
+	top: 0;
+	background: #21ebff;
+	box-shadow: 0 0 5px #21ebff;
+	transition: all 0.3s ease;
+}
+.btn-7 span:before {
+	width: 2px;
+	height: 50%;
+}
+.btn-7 span:after {
+	height: 2px;
+	width: 20%;
+}
+.btn-7 span:hover:before {
+	height: 100%;
+}
+.btn-7 span:hover:after {
+	width: 100%;
 }
