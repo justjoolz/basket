@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { selectedBasketMeta } from '$lib/flow/stores.client';
-	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { modalStore, type ModalSettings, TabGroup, Tab } from '@skeletonlabs/skeleton';
 
 	export let nfts: NFTCatalogEntry[][];
 	export let fts: FTCatalogEntry[];
+	export let imgSrc: string;
+	export let title: string;
+	let tabSet: string = 'nfts';
 
 	function modalComponentWithdrawNft(nft: NFTCatalogEntry): void {
 		const modal: ModalSettings = {
@@ -33,44 +36,57 @@
 	console.log(fts, 'fts');
 </script>
 
-<div class="flex flex-col w-full h-full pb-14">
-	<div class="flex flex-col p-4 gap-y-4 w-full">
-		<h4 class="h4 font-bold">NFTs</h4>
-		{#each nfts as nftCollection}
-			<div class="flex flex-col border p-4 gap-y-2">
-				<p class="h3 font-bold">{nftCollection[0]?.collectionName}</p>
-				{#each nftCollection as nft}
-					<div class="flex items-center border rounded-md p-4 px-20 gap-x-6">
-						<div class="flex gap-x-4 items-center w-1/3">
-							<img src={nft.thumbnail} alt={nft.name} class="block h-12 w-auto" />
+<div class="flex flex-col h-full pb-14 px-10 w-1/2">
+	<div class="w-full flex items-center gap-x-3 pb-8">
+		<img src={imgSrc} alt="" class="w-8 pb-1" />
+		<p class="text-3xl font-b7">{title}</p>
+	</div>
+	<div class="border-primary p-6">
+		<TabGroup>
+			<Tab bind:group={tabSet} name="tab1" value={'nfts'}>
+				<span>NFTs</span>
+			</Tab>
+			<Tab bind:group={tabSet} name="tab2" value={'fts'}>FTs</Tab>
+		</TabGroup>
+		<div class="w-full border py-6 flex flex-col gap-y-4">
+			{#if tabSet === 'nfts'}
+				{#each nfts as nftCollection}
+					<div>
+						<p class="h3 font-bold px-4">{nftCollection[0]?.collectionName}</p>
+						<div class="gridDisplay p-4">
+							{#each nftCollection as nft}
+								<div
+									class="flex flex-col items-center justify-between bg-tertiary-900 rounded-md p-4 hoverShadow"
+								>
+									<div class="flex flex-col items-center w-full">
+										<img src={nft.thumbnail} alt={nft.name} class="w-12" />
+										<p class="text-sm pt-2 pb-6 text-center">{nft.name}</p>
+									</div>
+									<button class="btn font-bold" on:click={() => modalComponentWithdrawNft(nft)}
+										>Deposit</button
+									>
+								</div>
+							{/each}
 						</div>
-						<div class="flex w-1/3">
-							<h4 class="h4 font-bold pb-2">{nft.name}</h4>
-						</div>
-						<button
-							class="btn variant-filled-primary font-bold ml-12"
-							on:click={() => modalComponentWithdrawNft(nft)}>Withdraw</button
-						>
 					</div>
 				{/each}
-			</div>
-		{/each}
-	</div>
-	<div class="flex flex-col p-4 gap-y-4 w-full">
-		<h4 class="h4 font-bold">FTs</h4>
-		{#each fts as ftCollection}
-			<div class="flex items-center border rounded-md p-4 px-20 gap-x-6">
-				<div class="flex items-center w-1/3">
-					<h4 class="h4 font-bold pr-3">{ftCollection.token}</h4>
+			{:else if tabSet === 'fts'}
+				<div class="gridDisplay p-4 pt-12">
+					{#each fts as ftCollection}
+						<div
+							class="flex flex-col items-center justify-between bg-tertiary-900 rounded-md p-4 hoverShadow"
+						>
+							<div class="flex flex-col items-center w-full">
+								<h4>{ftCollection.token}</h4>
+								<p>{ftCollection.balance}</p>
+							</div>
+							<button class="btn font-bold" on:click={() => modalComponentWithdrawFt(ftCollection)}
+								>Deposit</button
+							>
+						</div>
+					{/each}
 				</div>
-				<div class="flex w-1/3">
-					<p class="h4 font-bold pr-3">${ftCollection.balance}</p>
-				</div>
-				<button
-					class="btn variant-filled-primary font-bold ml-12"
-					on:click={() => modalComponentWithdrawFt(ftCollection)}>Withdraw</button
-				>
-			</div>
-		{/each}
+			{/if}
+		</div>
 	</div>
 </div>

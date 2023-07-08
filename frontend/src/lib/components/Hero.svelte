@@ -1,5 +1,5 @@
 <script>
-	import { logIn } from '$lib/flow/actions';
+	import { logIn } from '$lib/flow/actions.client';
 </script>
 
 <div class="h-full mx-auto flex justify-start items-center hero-back">

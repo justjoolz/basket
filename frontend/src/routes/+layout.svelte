@@ -70,7 +70,7 @@
 
 <AppShell>
 	<svelte:fragment slot="header"
-		><AppBar padding="px-12 py-4 nav-shadow">
+		><AppBar padding="px-12 py-4 nav-shadow !bg-surface-900">
 			<svelte:fragment slot="lead">
 				<a href="/" class="flex items-start justify-start"
 					><strong class="text-4xl !leading-8">Basket</strong></a
