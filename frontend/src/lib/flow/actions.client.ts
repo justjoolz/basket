@@ -1,14 +1,17 @@
 import * as fcl from "@onflow/fcl";
 import "./config";
-import { user, transactionStatus, usersNFTs, usersFTs, ftTokens, usersBasketIds, selectedBasketMeta } from './stores';
+import { user, transactionStatus, usersNFTs, usersFTs, ftTokens, usersBasketIds, selectedBasketMeta } from './stores.client';
 import { GET_ALL_NFTS_IN_ACCOUNT_SCRIPT } from "./scripts";
 import type { CurrentUser } from "@onflow/fcl/types/current-user";
 import { CREATE_BASKET } from "./txs/createBasket";
-import { TokenListProvider, type TokenInfo } from "flow-native-token-registry";
+import { TokenListProvider, type TokenInfo, ENV, Strategy } from "flow-native-token-registry";
 import { get } from "svelte/store";
 import { GET_ACCOUNT_STORAGE_DETAILS } from "./scripts/get_account_storage_details";
 import { GET_BASKETS } from "./scripts/get_baskets";
 import { GET_BASKET_METADATA } from "./scripts/get_nft_metadata";
+import { PUBLIC_FLOW_NETWORK } from "$env/static/public";
+
+export const ssr = false;
 
 // set Svelte $user store to currentUser, 
 // so other components can access it
@@ -103,18 +106,21 @@ export const getBasketMetadata = async (addr: String, nftId: String) => {
 }
 
 
-function fetchTokenBalances(tokens: TokenInfo[]) {
+export async function fetchTokenBalances(tokens: TokenInfo[]) {
     if (!tokens.length) return
 
     const balances: { token: string, balance: number }[] = []
     const _user: CurrentUser = get(user)
     if (!_user) return
+    console.log('before for each', _user)
     tokens.forEach(async (element) => {
+        console.log('getting balance for ', element.symbol)
         const balance = await getFTBalance(_user.addr ?? '', element)
         // delay 1s to avoid rate limit
         await new Promise(r => setTimeout(r, 1000));
         if (balance) balances.push({ token: element.symbol, balance: balance })
     });
+    console.log({ balances })
     usersFTs.set(balances)
 }
 
@@ -139,6 +145,7 @@ export const createEmptyBasket = async () => {
 }
 
 export const getFTBalance = async (addr: String, ft: TokenInfo) => {
+    if (!addr) { return }
     transactionStatus.set(`Fetching your FTs... ${ft.name}`);
 
     const code = `
@@ -330,46 +337,48 @@ const sendTokens = async (recipient: string, amount: string) => {
 };
 
 
-const getFTs = () => {
-    new TokenListProvider().resolve().then((tokens) => {
+const getFTs = async () => {
+    console.log("getting token list")
+    let env = PUBLIC_FLOW_NETWORK === 'mainnet' ? ENV.Mainnet : ENV.Testnet;
+    console.log(PUBLIC_FLOW_NETWORK, env)
+    return new TokenListProvider().resolve("CDN" as Strategy, env).then((tokens) => {
         const tokenList = tokens.getList();
         ftTokens.set(tokenList);
+        console.log("set token list")
         return tokenList
     });
 }
 
+
+
+
+async function fetchUsersData() {
+    await getUsersNFTs(get(user).addr ?? '');
+
+    await getFTs().then(async (ftTokens) => {
+        console.log('fetching token balances....')
+        await fetchTokenBalances(ftTokens)
+    });
+
+    await getBaskets(get(user).addr ?? '');
+}
+
+function handleUserChange(user: CurrentUser) {
+    console.log('currentUser changed', { user });
+    if (user?.loggedIn) {
+        transactionStatus.set('logged in fetching users data')
+        fetchUsersData();
+    } else {
+        usersNFTs.set({});
+        usersFTs.set([]);
+        usersBasketIds.set([]);
+        transactionStatus.set('logged out')
+    }
+}
+
 // Subscriptions ///////////////////////////////////////////////////
-
-// on user fetch their data
-user.subscribe((value) => {
-    if (!value.loggedIn) return
-    console.log('currentUser changed', { value });
-    const usersAddress = (value as unknown as CurrentUser).addr;
-    if (!usersAddress) { return }
-    console.log('fetching nfts for currentUser', usersAddress);
-    getUsersNFTs(usersAddress);
-    getFTs();
-    getBaskets(usersAddress);
-});
-
-ftTokens.subscribe((value) => {
-    if (value.length == undefined) return
-    console.log('ftTokens changed', value.length)
-    transactionStatus.set('Fetching your FTs...');
-    fetchTokenBalances(value)
-})
-
-usersFTs.subscribe((fungibles) => {
-    if (fungibles.length === undefined) return
-    console.log('usersFTs changed', { fungibles }, !fungibles.length)
-})
-
-usersNFTs.subscribe((value) => {
-    if (!Object.keys(value).length) return
-    console.log('usersNFTs changed', { value });
-});
+user.subscribe(handleUserChange);
 
 transactionStatus.subscribe((value) => {
     console.log('transactionStatus changed', { value });
-
 });

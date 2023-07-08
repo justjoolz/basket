@@ -11,7 +11,8 @@
 		"NonFungibleToken": {
 			"source": "./contracts/lib/NonFungibleToken.cdc",
 			"aliases": {
-				"testnet": "0x631e88ae7f1d7c20"
+				"testnet": "0x631e88ae7f1d7c20",
+				"mainnet": "0x1d7e57aa55817448"
 			}
 		},
 		"FlowToken": {
@@ -60,11 +61,19 @@
 	"accounts": {
 		"admin-account": {
 			"address": "ca909b58fecc185a"
+		},
+		"mainnet-admin": {
+			"address": "f8d6e0586b0a20c7"
 		}
 	},
 	"deployments": {
 		"testnet": {
 			"admin-account": [
+				"Basket"
+			]
+		},
+		"mainnet": {
+			"mainnet-admin": [
 				"Basket"
 			]
 		}

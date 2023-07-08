@@ -23,9 +23,8 @@
 	import WithdrawModal from '$lib/components/Modals/WithdrawModal.svelte';
 	import CreateBasketModal from '$lib/components/Modals/CreateBasketModal.svelte';
 	import DepositModal from '$lib/components/Modals/DepositModal.svelte';
-	import { logIn, unauthenticate } from '$lib/flow/actions';
-	import { currentUser } from '@onflow/fcl';
-	import { user } from '$lib/flow/stores';
+	import { logIn, unauthenticate } from '$lib/flow/actions.client';
+	import { user } from '$lib/flow/stores.client';
 
 	const t: ToastSettings = {
 		message: 'menu opened'

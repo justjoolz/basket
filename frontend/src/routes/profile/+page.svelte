@@ -18,7 +18,7 @@
 		ftDictionaryToArray,
 		usersBasketIds,
 		selectedBasketMeta
-	} from '$lib/flow/stores';
+	} from '$lib/flow/stores.client';
 	import ContentDisplay from '$lib/components/ContentDisplay.svelte';
 
 	function modalComponentDeposit(): void {

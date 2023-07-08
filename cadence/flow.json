@@ -45,7 +45,8 @@
 		"NonFungibleToken": {
 			"source": "./contracts/lib/NonFungibleToken.cdc",
 			"aliases": {
-				"testnet": "631e88ae7f1d7c20"
+				"testnet": "631e88ae7f1d7c20",
+				"mainnet": "0x1d7e57aa55817448"
 			}
 		},
 		"VaultNFT": "./contracts/VaultNFT.cdc",
