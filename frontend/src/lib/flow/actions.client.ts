@@ -1,5 +1,5 @@
 import * as fcl from "@onflow/fcl";
-import "./config";
+import "./config.client";
 import { user, transactionStatus, usersNFTs, usersFTs, ftTokens, usersBasketIds, selectedBasketMeta } from './stores.client';
 import { GET_ALL_NFTS_IN_ACCOUNT_SCRIPT } from "./scripts";
 import type { CurrentUser } from "@onflow/fcl/types/current-user";
@@ -10,6 +10,7 @@ import { GET_ACCOUNT_STORAGE_DETAILS } from "./scripts/get_account_storage_detai
 import { GET_BASKETS } from "./scripts/get_baskets";
 import { GET_BASKET_METADATA } from "./scripts/get_nft_metadata";
 import { PUBLIC_FLOW_NETWORK } from "$env/static/public";
+import { setupFCL } from "./config.client";
 
 export const ssr = false;
 
@@ -95,9 +96,11 @@ export const getBasketMetadata = async (addr: String, nftId: String) => {
             args: (arg, t) => [arg(addr, t.Address), arg(nftId, t.UInt64)]
         })
 
+        basketMeta.id = nftId
         selectedBasketMeta.set(basketMeta)
+
         // usersNFTs.set(nfts ?? 'No NFTs found');
-        transactionStatus.set('Baskets loaded.')
+        transactionStatus.set(`Basket ${nftId} metadata loaded.`)
 
     } catch (e) {
         transactionStatus.set(e)
@@ -112,16 +115,23 @@ export async function fetchTokenBalances(tokens: TokenInfo[]) {
     const balances: { token: string, balance: number }[] = []
     const _user: CurrentUser = get(user)
     if (!_user) return
-    console.log('before for each', _user)
-    tokens.forEach(async (element) => {
-        console.log('getting balance for ', element.symbol)
-        const balance = await getFTBalance(_user.addr ?? '', element)
+
+    const promises = tokens.map(async element => {
+        const balance = await getFTBalance(_user.addr ?? '', element);
         // delay 1s to avoid rate limit
         await new Promise(r => setTimeout(r, 1000));
-        if (balance) balances.push({ token: element.symbol, balance: balance })
+        if (balance) {
+            balances.push({
+                token: element.symbol,
+                balance
+            });
+        }
     });
+
+    await Promise.all(promises);
+
     console.log({ balances })
-    usersFTs.set(balances)
+    return usersFTs.set(balances)
 }
 
 
@@ -181,12 +191,12 @@ pub fun main(address: Address): UFix64? {
 
 }
 
-const basket = {
-    depositFT: async (baskedId: number, storagePath: string, amount: string) => {
+export const basketTxs = {
+    depositFT: async (baskedId: string, storagePath: string, amount: string) => {
 
         const cadence = `
-        import FungibleToken
-        import Basket
+        import "FungibleToken"
+        import "Basket"
         
         transaction(basketID: UInt64, storagePath: String, amount: UFix64) {
             
@@ -194,18 +204,21 @@ const basket = {
                 let baskets = acct.borrow<&Basket.Collection>(from: Basket.CollectionStoragePath) ?? panic("Could not borrow a reference to the owner's basket collection")
                 let basket = baskets.borrowBasket(id: basketID) ?? panic("Could not borrow a reference to the owner's basket")
                 
-                let vaultRef = acct.borrow<&FungibleToken.Vault>(from: StoragePath(identifier: storagePath)!)
+                let vaultRef = acct.borrow<&FungibleToken.Vault>(from: ${storagePath})
                 ?? panic("Could not borrow reference to the owner's Vault @ /storage/".concat(storagePath))
                 
                 basket.depositFungibleTokens(from: <- vaultRef.withdraw(amount: amount))
             }
         }
         `
+
+        console.log({ cadence })
         transactionStatus.set(`depositing ${amount} of tokens from ${storagePath} to basket #${baskedId}`);
 
         try {
             const txId = await fcl.mutate({
                 cadence: cadence,
+                args: (arg, t) => [arg(baskedId, t.UInt64), arg(storagePath, t.String), arg(amount, t.UFix64)]
             })
 
             fcl.tx(txId).subscribe(res => {
@@ -220,13 +233,14 @@ const basket = {
         }
     },
 
-    depositNFTs: async (baskedId: number, storagePath: string, ids: string[]) => {
+    depositNFTs: async (baskedId: string, storagePath: string, ids: string[], collectionName: string, address: string) => {
 
         const cadence = `
-        import NonFungibleToken
-        import Basket
+        import NonFungibleToken from 0xNonFungibleToken
+        import Basket from 0xBasket
+        import ${collectionName} from ${address}
         
-        transaction(basketID: UInt64, storagePath: String, ids: [UInt64]) {
+        transaction(basketID: UInt64, storagePath: String, ids: [UInt64], address: Address) {
             
             prepare(acct: AuthAccount) {
                 let baskets = acct.borrow<&Basket.Collection>(from: Basket.CollectionStoragePath) ?? panic("Could not borrow a reference to the owner's basket collection")
@@ -235,17 +249,30 @@ const basket = {
                 let collectionRef = acct.borrow<&NonFungibleToken.Collection>(from: StoragePath(identifier: storagePath)!)
                 ?? panic("Could not borrow reference to the owner's collection @ /storage/".concat(storagePath))
                 
-                for id in ids {
-                    basket.depositNonFungibleTokens(from: <- collectionRef.withdraw(withdrawID: id)
-                }
+                // let contract = getAccount(address).contracts.borrow<&${collectionName}.Collection>(name: "${collectionName}")
+
+                let emptyCollection <- ${collectionName}.createEmptyCollection()
+
+                let nft <- collectionRef.withdraw(withdrawID: ids[0])
+                emptyCollection.deposit(token: <- nft)
+                basket.depositNonFungibleTokens(from: <- emptyCollection)
+
+                // for id in ids {
+                //     let nft <- collectionRef.withdraw(withdrawID: id)
+                //     emptyCollection.deposit(token: <- nft)
+                // }
+                // basket.depositNonFungibleTokens(from: <- emptyCollection)
             }
         }
         `
+        console.log({ cadence })
         transactionStatus.set(`depositing ${JSON.stringify(ids)} tokens from ${storagePath} to basket #${baskedId}`);
+
 
         try {
             const txId = await fcl.mutate({
                 cadence: cadence,
+                args: (arg, t) => [arg(baskedId, t.UInt64), arg(storagePath, t.String), arg(ids, t.Array(t.UInt64)), arg(address, t.Address)]
             })
 
             fcl.tx(txId).subscribe(res => {
@@ -263,8 +290,8 @@ const basket = {
     bulkDepositNFTs: async (baskedId: number, storagePath: string, ids: string[]) => {
 
         const cadence = `
-        import NonFungibleToken
-        import Basket
+        import "NonFungibleToken"
+        import "Basket"
         
         transaction(basketID: UInt64, storagePaths: [String], ids: [[UInt64]]) {
             
@@ -304,7 +331,7 @@ const basket = {
 }
 
 
-const sendTokens = async (recipient: string, amount: string) => {
+export const sendTokens = async (recipient: string, amount: string) => {
     const cadence = `
     import FungibleToken from 0xFungibleToken
     import FlowToken from 0xFLOW
@@ -364,14 +391,66 @@ async function fetchUsersData() {
 }
 
 function handleUserChange(user: CurrentUser) {
-    console.log('currentUser changed', { user });
+    console.log('currentUser changed', { user }, '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+    setupFCL()
     if (user?.loggedIn) {
-        transactionStatus.set('logged in fetching users data')
+        transactionStatus.set('logged in fetching users data ');
         fetchUsersData();
     } else {
         usersNFTs.set({});
         usersFTs.set([]);
         usersBasketIds.set([]);
+        selectedBasketMeta.set({
+            name: "",
+            description: "",
+            thumbnail: "",
+            owner: "",
+            type: "",
+            royalties: [],
+            externalURL: "",
+            serialNumber: "",
+            collectionPublicPath: {
+                domain: "",
+                identifier: ""
+            },
+            collectionStoragePath: {
+                domain: "",
+                identifier: ""
+            },
+            collectionProviderPath: {
+                domain: "",
+                identifier: ""
+            },
+            collectionPublic: "",
+            collectionPublicLinkedType: "",
+            collectionProviderLinkedType: "",
+            collectionName: "",
+            collectionDescription: "",
+            collectionExternalURL: "",
+            collectionSquareImage: "",
+            collectionBannerImage: "",
+            collectionSocials: {
+                twitter: ""
+            },
+            edition: {
+                name: "",
+                number: "",
+                max: null
+            },
+            traits: {
+                traits: [
+                    {
+                        name: "",
+                        value: "",
+                        displayType: "",
+                        rarity: null
+                    }
+                ]
+            },
+            medias: undefined,
+            license: null,
+            id: ""
+        });
         transactionStatus.set('logged out')
     }
 }
@@ -379,6 +458,6 @@ function handleUserChange(user: CurrentUser) {
 // Subscriptions ///////////////////////////////////////////////////
 user.subscribe(handleUserChange);
 
-transactionStatus.subscribe((value) => {
-    console.log('transactionStatus changed', { value });
-});
+// transactionStatus.subscribe((value) => {
+//     console.log('transactionStatus changed', { value });
+// });

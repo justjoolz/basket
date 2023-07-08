@@ -2,7 +2,14 @@
 	"contracts": {
 		"Basket": "./contracts/Basket.cdc",
 		"Clock": "./contracts/lib/Clock.cdc",
-		"ExampleNFT": "./contracts/lib/ExampleNFT.cdc",
+		"ExampleNFT": {
+			"source": "./contracts/lib/ExampleNFT.cdc",
+			"aliases": {
+				"emulator": "f8d6e0586b0a20c7",
+				"mainnet": "49a7cda3a1eecc29",
+				"testnet": "324c34e1c517e4db"
+			}
+		},
 		"FUSD": "./contracts/lib/FUSD.cdc",
 		"FlowToken": {
 			"source": "./contracts/lib/FlowToken.cdc",
@@ -23,6 +30,7 @@
 		"MetadataViews": {
 			"source": "./contracts/lib/MetadataViews.cdc",
 			"aliases": {
+				"emulator": "f8d6e0586b0a20c7",
 				"mainnet": "1d7e57aa55817448",
 				"testnet": "631e88ae7f1d7c20"
 			}
@@ -38,6 +46,7 @@
 		"NFTRetrieval": {
 			"source": "./contracts/lib/NFTRetrieval.cdc",
 			"aliases": {
+				"emulator": "f8d6e0586b0a20c7",
 				"mainnet": "49a7cda3a1eecc29",
 				"testnet": "324c34e1c517e4db"
 			}
@@ -45,14 +54,16 @@
 		"NonFungibleToken": {
 			"source": "./contracts/lib/NonFungibleToken.cdc",
 			"aliases": {
-				"testnet": "631e88ae7f1d7c20",
-				"mainnet": "0x1d7e57aa55817448"
+				"emulator": "f8d6e0586b0a20c7",
+				"mainnet": "1d7e57aa55817448",
+				"testnet": "631e88ae7f1d7c20"
 			}
 		},
 		"VaultNFT": "./contracts/VaultNFT.cdc",
 		"ViewResolver": {
 			"source": "./contracts/lib/ViewResolver.cdc",
 			"aliases": {
+				"emulator": "f8d6e0586b0a20c7",
 				"mainnet": "1d7e57aa55817448",
 				"testnet": "631e88ae7f1d7c20"
 			}
@@ -68,8 +79,15 @@
 			"address": "f8d6e0586b0a20c7",
 			"key": "fe8df2fe3a7b10252c3ad977eedf1e467a15ddec50a0ca2a4e9a3dd48ec50e74"
 		},
+		"mainnet-admin": {
+			"address": "15108c416204569e",
+			"key": {
+				"type": "file",
+				"location": "mainnet-admin.pkey"
+			}
+		},
 		"testnet-admin": {
-			"address": "ca909b58fecc185a",
+			"address": "0xca909b58fecc185a",
 			"key": {
 				"type": "file",
 				"location": "testnet-admin.pkey"
@@ -88,6 +106,7 @@
 		"emulator": {
 			"emulator-account": [
 				"NonFungibleToken",
+				"ExampleNFT",
 				"FUSD",
 				"MetadataViews",
 				"ViewResolver",
@@ -96,6 +115,11 @@
 		},
 		"testnet": {
 			"testnet-admin": [
+				"Basket"
+			]
+		},
+		"mainnet": {
+			"mainnet-admin": [
 				"Basket"
 			]
 		}

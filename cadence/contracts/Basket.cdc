@@ -24,6 +24,11 @@ pub contract Basket: NonFungibleToken, ViewResolver {
     pub fun getDefaultCollectionStoragePath(): StoragePath { return self.CollectionStoragePath }
     pub fun getDefaultCollectionPublicPath(): PublicPath { return self.CollectionPublicPath }
 
+    pub event DepositFungibleTokens(identifier: String, amount: UFix64)
+    pub event WithdrawFungibleTokens(identifier: String, amount: UFix64)
+    pub event DepositNonFungibleTokens(identifier: String, ids: [UInt64])
+    pub event WithdrawNonFungibleTokens(identifier: String, ids: [UInt64])
+
     // BasketPublic
     //
     // allows access to read the metadata and ipfs pin of the nft
@@ -98,7 +103,7 @@ pub contract Basket: NonFungibleToken, ViewResolver {
                         )
                     )
                 case Type<MetadataViews.Editions>():
-                    let editionInfo = MetadataViews.Edition(name: "MegaVault NFT Edition", number: self.id, max: nil)
+                    let editionInfo = MetadataViews.Edition(name: "Basket NFT Edition", number: self.id, max: nil)
                     let editionList: [MetadataViews.Edition] = [editionInfo]
                     return MetadataViews.Editions(
                         editionList
@@ -175,14 +180,58 @@ pub contract Basket: NonFungibleToken, ViewResolver {
             return nftIDs
         }
 
+        pub fun getCollectionViews(): AnyStruct {
+            let collectionViews: {String: AnyStruct} = {}
+
+            for key in self.collections.keys {
+                let collectionRef = &self.collections[key] as &NonFungibleToken.Collection?
+                let addr = Address.fromString("0x".concat(key.slice(from: 2, upTo: 18)))!
+                let contractName = key.slice(from: 19, upTo: key.length - 11)
+                let borrowedContract = getAccount(addr).contracts.borrow<&ViewResolver>(name: contractName) // ?? panic("contract could not be borrowed")
+                
+                if borrowedContract != nil {
+                    collectionViews[key] = {"NFTCollectionData": borrowedContract?.resolveView(Type<MetadataViews.NFTCollectionData>())!, "NFTCollectionDisplay": borrowedContract?.resolveView(Type<MetadataViews.NFTCollectionDisplay>())!}
+                }
+            }
+            return collectionViews
+        }
+
+        pub fun getNFTViews(key: String): AnyStruct {
+            // get collection ref
+            let collectionRef = &self.collections[key] as &NonFungibleToken.Collection?
+            if (collectionRef == nil) {
+                log("invalid collection ref returning" )
+                return nil
+            }
+
+            let nftViews: {String: AnyStruct} = {}
+            for id in collectionRef!.getIDs() {
+                log("nft")
+                log(id)
+
+                let nftRef = collectionRef?.borrowNFT!(id: id) // as! auth &AnyResource{MetadataViews.Resolver} 
+                // let viewResolver = nftRef.borrowViewResolver(id: id)
+                log(nftRef)
+
+                log(nftRef.getType())
+                let nftType = nftRef.getType()
+                nftViews[id.toString()] =nftRef
+            }
+            return nftViews
+        }
+
+        // pub fun getVaultViews()
+
         pub fun depositFungibleTokens(from: @FungibleToken.Vault) {
             let identifier = from.getType().identifier
+            let balance = from.balance
             if self.vaults[identifier] == nil {
                 self.vaults[identifier] <-! from
             } else {
                 let depositRef = &self.vaults[identifier] as &FungibleToken.Vault?
                 depositRef!.deposit(from: <- from)
             }
+            emit DepositFungibleTokens(identifier: identifier, amount: balance)
         }
 
         pub fun withdrawFungibleTokens( identifier: String, amount: UFix64 ) : @FungibleToken.Vault {
@@ -195,16 +244,16 @@ pub contract Basket: NonFungibleToken, ViewResolver {
 
         pub fun depositNonFungibleTokens(from: @NonFungibleToken.Collection) {
             let identifier = from.getType().identifier
+            let ids = from.getIDs()
             if self.collections[identifier] != nil {
-                for id in from.getIDs() {
+                for id in ids {
                     self.collections[identifier]?.deposit(token: <- from.withdraw(withdrawID: id))
                 }
                 destroy from
             }  else {
-                let nullResource 
-                    <- self.collections.insert(key: identifier, <- from)
-                destroy nullResource
+                    self.collections[identifier] <-! from
             }
+            emit DepositNonFungibleTokens(identifier: identifier, ids: ids)
         }
 
         // requires passing in a correctly typed targetCollection which receives the tokens and can be created in the transaction 
@@ -372,7 +421,7 @@ pub contract Basket: NonFungibleToken, ViewResolver {
         self.account.save(<-collection, to: Basket.CollectionStoragePath)
 
         // create a public capability for the collection
-        self.account.link<&{NonFungibleToken.CollectionPublic}>(
+        self.account.link<&{BasketCollectionPublic, NonFungibleToken.CollectionPublic}>(
             Basket.CollectionPublicPath,
             target: Basket.CollectionStoragePath
         )

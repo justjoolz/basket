@@ -55,20 +55,24 @@
 		},
 		"ExampleNFT": "./contracts/lib/ExampleNFT.cdc",
 		"VaultNFT": "./contracts/VaultNFT.cdc",
-		"Basket": "./contracts/Basket.cdc",
-		"NFTLoanAuction": "./contracts/NFTLoanAuction.cdc"
+		"Basket": {
+			"source": "./contracts/Basket.cdc",
+			"aliases": {
+				"testnet": "0xca909b58fecc185a"
+			}
+		}
 	},
 	"accounts": {
-		"admin-account": {
-			"address": "ca909b58fecc185a"
+		"testnet-admin=account": {
+			"address": "0xca909b58fecc185a"
 		},
 		"mainnet-admin": {
-			"address": "f8d6e0586b0a20c7"
+			"address": "0xf8d6e0586b0a20c7"
 		}
 	},
 	"deployments": {
 		"testnet": {
-			"admin-account": [
+			"testnet-admin-account": [
 				"Basket"
 			]
 		},

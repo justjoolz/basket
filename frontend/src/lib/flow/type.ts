@@ -78,3 +78,63 @@ type FTCatalogEntry = {
 type NFTCatalogEntries = {
 	[key: string]: NFTCatalogEntry;
 };
+
+type BasketNFTMeta = {
+	name: string;
+	description: string;
+	thumbnail: string;
+	owner: string;
+	type: string;
+	royalties: [];
+	externalURL: string;
+	serialNumber: string;
+
+	collectionPublicPath: {
+		domain: string;
+		identifier: string;
+	};
+
+	collectionStoragePath: {
+		domain: string;
+		identifier: string;
+	};
+
+	collectionProviderPath: {
+		domain: string;
+		identifier: string;
+	};
+
+	collectionPublic: string;
+	collectionPublicLinkedType: string;
+
+	collectionProviderLinkedType: string;
+	collectionName: string;
+	collectionDescription: string;
+	collectionExternalURL: string;
+	collectionSquareImage: string;
+	collectionBannerImage: string;
+	collectionSocials: {
+		twitter: string;
+	};
+
+	edition: {
+		name: string;
+		number: string;
+		max: null | number;
+	};
+
+	traits: {
+		traits: [
+			{
+				name: string;
+				value: any;
+				displayType: string | null;
+				rarity: number | null;
+			}
+		]
+	};
+
+	medias: null | any;
+	license: null | string;
+	id: string;
+}

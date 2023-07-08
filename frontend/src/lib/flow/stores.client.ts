@@ -9,7 +9,7 @@ export const usersNFTs = writable({} as NFTCatalogEntries);
 export const ftTokens = writable({} as TokenInfo[]);
 export const usersFTs = writable({} as { token: string; balance: number }[]);
 export const usersBasketIds = writable([] as number[]);
-export const selectedBasketMeta = writable({} as NFTCatalogEntry);
+export const selectedBasketMeta = writable({} as BasketNFTMeta);
 
 export const transactionStatus = writable();
 export const walletContents = writable();
@@ -26,4 +26,6 @@ export function ftDictionaryToArray(dictionary: any) {
 	console.log('fitleredArray', filteredArray);
 	return filteredArray;
 }
+
+
 
