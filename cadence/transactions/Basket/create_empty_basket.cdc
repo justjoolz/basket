@@ -5,11 +5,11 @@ transaction() {
 
     prepare(signer: AuthAccount) {
 
-        // Borrow the recipient's public NFT collection reference
+        // Borrow the recipient's public NFT basket collection reference
         let receiver = signer
             .getCapability(Basket.CollectionPublicPath)
             .borrow<&{NonFungibleToken.CollectionPublic}>()
-            ?? panic("Could not get receiver reference to the NFT Collection")
+            ?? panic("Could not get receiver reference to the Basket Collection")
 
         let emptyVaultNFT <- Basket.createEmptyBasket()
         

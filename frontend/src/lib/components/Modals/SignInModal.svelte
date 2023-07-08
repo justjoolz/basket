@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { modalStore } from '@skeletonlabs/skeleton';
-	import { logIn } from '$lib/flow/actions';
+	import { logIn } from '$lib/flow/actions.client';
 
 	export let parent: any;
 

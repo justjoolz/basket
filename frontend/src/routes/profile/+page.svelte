@@ -19,8 +19,10 @@
 		ftDictionaryToArray,
 		usersBasketIds,
 		selectedBasketMeta
-	} from '$lib/flow/stores';
+	} from '$lib/flow/stores.client';
 	import ContentDisplay from '$lib/components/ContentDisplay.svelte';
+	import { getBasketMetadata } from '$lib/flow/actions.client';
+	import { get } from 'svelte/store';
 
 	function modalComponentDeposit(): void {
 		const modal: ModalSettings = {
@@ -49,9 +51,8 @@
 	let walletFTs: FTCatalogEntry[];
 	let userBaskets: NFTCatalogEntry[][] = [];
 	$: walletNFTs = dictionaryToArray($usersNFTs);
-	$: walletFTs = ftDictionaryToArray($usersFTs);
-	$: transactionStatusToast($transactionStatus as string);
-	let basketCollection: any[] = [];
+	$: walletFTs = [...ftDictionaryToArray($usersFTs)];
+	$: console.log(walletFTs, 'walletFTs');
 
 	function modalComponentWithdrawNft(id: string): void {
 		const modal: ModalSettings = {
@@ -64,7 +65,7 @@
 	function modalComponentWithdrawFt(name: string) {
 		const modal: ModalSettings = {
 			type: 'component',
-			title: `Withdraw ${name}`,
+			title: `Withdraw FT ${name}`,
 			component: 'withdraw'
 		};
 		modalStore.trigger(modal);
@@ -82,6 +83,19 @@
 	$: vaults = dictionaryToArray($usersNFTs);
 	let currentTile: number = 1;
 	$: currentVault = vaults[currentTile - 1];
+
+	function basketClick(basket: string) {
+		return () => {
+			getBasketMetadata(get(user).addr ?? '', basket);
+			console.log(basket);
+		};
+	}
+
+	let traits: string;
+	$: traits = JSON.stringify($selectedBasketMeta.traits).split(',').join(',\n');
+
+	// $: console.log(vaults);
+	// $: console.log(currentVault);
 </script>
 
 <div class="flexColumnCenter">
@@ -109,16 +123,20 @@
 						<div class="w-1/2 flex flex-col pl-6">
 							<div class="flex">
 								<TabGroup>
-									<!-- {#each $usersBasketIds as basket}
-										<Tab bind:group={tabSet} name="tab1" value={basket}>
+									{#each $usersBasketIds as basketId}
+										<!-- svelte-ignore a11y-click-events-have-key-events -->
+										<Tab bind:group={tabSet} name="tab1" value={basketId}>
 											<svelte:fragment
-												><div class="flex items-center gap-x-3">
+												><div
+													class="flex items-center gap-x-3"
+													on:click={basketClick(basketId.toString())}
+												>
 													<img src={basketIcon} alt="" class="w-10 h-10" />
-													<p class="text-2xl font-bold">{basket}</p>
+													<p class="text-2xl font-bold">{basketId}</p>
 												</div></svelte:fragment
 											>
 										</Tab>
-									{/each} -->
+									{/each}
 								</TabGroup>
 								<div class="ml-2 pt-2">
 									<button
@@ -131,6 +149,15 @@
 							</div>
 							<!-- Tab Panels --->
 							<div>
+								{$selectedBasketMeta.id}
+
+								<!-- <pre class="text-sm">
+									{JSON.stringify($selectedBasketMeta).split(',').join(',\n')}
+								</pre> -->
+
+								<pre>
+									{traits}
+								</pre>
 								<!-- <ContentDisplay currentVault={$selectedBasketMeta} /> -->
 
 								<!-- {#each basketCollection as basket}

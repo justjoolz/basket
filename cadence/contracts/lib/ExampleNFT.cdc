@@ -355,6 +355,7 @@ pub contract ExampleNFT: NonFungibleToken, ViewResolver {
                     ),
                     mediaType: "image/svg+xml"
                 )
+                return media
         }
         return nil
     }

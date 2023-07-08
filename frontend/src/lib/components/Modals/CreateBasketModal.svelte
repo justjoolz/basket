@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEmptyBasket } from '$lib/flow/actions';
+	import { createEmptyBasket } from '$lib/flow/actions.client';
 	import { modalStore } from '@skeletonlabs/skeleton';
 
 	export let parent: any;

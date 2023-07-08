@@ -1,24 +1,34 @@
 <script lang="ts">
+	import { selectedBasketMeta } from '$lib/flow/stores.client';
 	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
 
 	export let nfts: NFTCatalogEntry[][];
 	export let fts: FTCatalogEntry[];
-	function modalComponentWithdrawNft(id: string): void {
+
+	function modalComponentWithdrawNft(nft: NFTCatalogEntry): void {
 		const modal: ModalSettings = {
 			type: 'component',
-			title: `Withdraw NFT ${id}`,
-			component: 'withdraw'
+			title: `Withdraw NFT ${nft.id} ${nft.name} ${nft.collectionName}`,
+			meta: nft,
+			component: 'withdrawNFT'
 		};
 		modalStore.trigger(modal);
 	}
-	function modalComponentWithdrawFt(name: string) {
+
+	function modalComponentWithdrawFt(ft: FTCatalogEntry) {
+		if ($selectedBasketMeta.id === undefined) {
+			alert('Please select a basket first');
+			return;
+		}
 		const modal: ModalSettings = {
 			type: 'component',
-			title: `Withdraw ${name}`,
-			component: 'withdraw'
+			title: `Withdraw ${ft.token}`,
+			meta: ft,
+			component: 'withdrawFT'
 		};
 		modalStore.trigger(modal);
 	}
+
 	console.log(nfts, 'nfts');
 	console.log(fts, 'fts');
 </script>
@@ -39,7 +49,7 @@
 						</div>
 						<button
 							class="btn variant-filled-primary font-bold ml-12"
-							on:click={() => modalComponentWithdrawNft(nft.id)}>Deposit </button
+							on:click={() => modalComponentWithdrawNft(nft)}>Withdraw</button
 						>
 					</div>
 				{/each}
@@ -58,7 +68,7 @@
 				</div>
 				<button
 					class="btn variant-filled-primary font-bold ml-12"
-					on:click={() => modalComponentWithdrawFt(ftCollection.token)}>Withdraw</button
+					on:click={() => modalComponentWithdrawFt(ftCollection)}>Withdraw</button
 				>
 			</div>
 		{/each}
