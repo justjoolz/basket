@@ -67,7 +67,7 @@
 						<p class="h3 font-bold px-4">{nftCollection[0]?.collectionName}</p>
 						<div class="gridDisplay p-4">
 							{#each nftCollection as nft}
-								<ItemCard type="nft" {nft} />
+								<ItemCard type="nft" {nft} location={title} />
 							{/each}
 						</div>
 					</div>
@@ -76,7 +76,7 @@
 				<p class="h3 font-bold px-4">Fungible Tokens</p>
 				<div class="gridDisplay px-4">
 					{#each fts as ft}
-						<ItemCard type="ft" {ft} />
+						<ItemCard type="ft" {ft} location={title} />
 					{/each}
 				</div>
 			{/if}

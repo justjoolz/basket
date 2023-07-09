@@ -14,6 +14,20 @@ export const selectedBasketMeta = writable({} as BasketNFTMeta);
 export const transactionStatus = writable();
 export const walletContents = writable();
 export const basket = writable();
+export const walletNFTWithdrawIds = writable([123] as number[]);
+export const walletFTWithdrawIds = writable([
+	{
+		token: 'USDC',
+		balance: 1
+	}
+] as FTCatalogEntry[]);
+export const basketNFTWithdrawIds = writable([456] as number[]);
+export const basketFTWithdrawIds = writable([
+	{
+		token: 'FLOW',
+		balance: 2
+	}
+] as FTCatalogEntry[]);
 
 export function dictionaryToArray(dictionary: any) {
 	return Object.keys(dictionary).map((key) => dictionary[key]) as NFTCatalogEntry[][];
@@ -26,6 +40,3 @@ export function ftDictionaryToArray(dictionary: any) {
 	console.log('fitleredArray', filteredArray);
 	return filteredArray;
 }
-
-
-

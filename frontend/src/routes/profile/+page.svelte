@@ -10,7 +10,6 @@
 	} from '@skeletonlabs/skeleton';
 	import walletIcon from '$lib/assets/wallet-icon.svg';
 	import basketIcon from '$lib/assets/basket-icon.svg';
-	import tradeIcon from '$lib/assets/trade-arrow.svg';
 
 	import {
 		dictionaryToArray,
@@ -20,11 +19,16 @@
 		usersFTs,
 		ftDictionaryToArray,
 		usersBasketIds,
-		selectedBasketMeta
+		selectedBasketMeta,
+		walletNFTWithdrawIds,
+		walletFTWithdrawIds,
+		basketNFTWithdrawIds,
+		basketFTWithdrawIds
 	} from '$lib/flow/stores.client';
 	import ContentDisplay from '$lib/components/ContentDisplay.svelte';
 	import { getBasketMetadata } from '$lib/flow/actions.client';
 	import { get } from 'svelte/store';
+	import TradeSection from '$lib/components/Trade/TradeSection.svelte';
 
 	function modalComponentDeposit(): void {
 		const modal: ModalSettings = {
@@ -71,15 +75,7 @@
 			component: 'withdraw'
 		};
 		modalStore.trigger(modal);
-	}
-	function modalComponentTrade(name: string) {
-		const modal: ModalSettings = {
-			type: 'component',
-			title: `Withdraw ${name}`,
-			component: 'withdraw'
-		};
-		modalStore.trigger(modal);
-	}
+	}	
 
 	let vaults: NFTCatalogEntry[][];
 	$: vaults = dictionaryToArray($usersNFTs);
@@ -145,27 +141,5 @@
 		<!-- </div>
 		</div> -->
 	</div>
-	<div class="flex flex-col w-full fixed bottom-0 bg-surface-900">
-		<div class="w-full h-2 flex px-[44px] gap-x-20">
-			<div class="border-t-2 border-primary-500 w-1/2" />
-			<div class="border-t-2 border-primary-500 w-1/2" />
-		</div>
-		<div class="flex w-full px-10 py-8">
-			<div class="flex w-2/5 items-center justify-center">
-				<p>testIds</p>
-			</div>
-			<div
-				class="flex gap-x-5 w-1/5 hover:scale-105 transition-all duration-300 items-center justify-center"
-			>
-				<img src={tradeIcon} alt="trade arrow" class="w-6" />
-				<div>
-					<button class="text-2xl font-bold" on:click={() => modalComponentTrade('nfts')}
-						>TRADE</button
-					>
-				</div>
-				<img src={tradeIcon} alt="trade arrow" class="rotate-180 w-6" />
-			</div>
-			<div class="flex w-2/5 items-center justify-center">testIds</div>
-		</div>
-	</div>
+	<TradeSection />
 </div>
