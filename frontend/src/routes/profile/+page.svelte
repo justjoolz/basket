@@ -145,21 +145,27 @@
 		<!-- </div>
 		</div> -->
 	</div>
-	<div class="flexColumnCenter w-full fixed bottom-0 bg-surface-900">
+	<div class="flex flex-col w-full fixed bottom-0 bg-surface-900">
 		<div class="w-full h-2 flex px-[44px] gap-x-20">
 			<div class="border-t-2 border-primary-500 w-1/2" />
 			<div class="border-t-2 border-primary-500 w-1/2" />
 		</div>
-		<div
-			class="flex w-full justify-center items-center gap-x-5 py-8 hover:scale-105 transition-all duration-300"
-		>
-			<img src={tradeIcon} alt="trade arrow" class="w-6" />
-			<div>
-				<button class="text-2xl font-bold" on:click={() => modalComponentTrade('nfts')}
-					>TRADE</button
-				>
+		<div class="flex w-full px-10 py-8">
+			<div class="flex w-2/5 items-center justify-center">
+				<p>testIds</p>
 			</div>
-			<img src={tradeIcon} alt="trade arrow" class="rotate-180 w-6" />
+			<div
+				class="flex gap-x-5 w-1/5 hover:scale-105 transition-all duration-300 items-center justify-center"
+			>
+				<img src={tradeIcon} alt="trade arrow" class="w-6" />
+				<div>
+					<button class="text-2xl font-bold" on:click={() => modalComponentTrade('nfts')}
+						>TRADE</button
+					>
+				</div>
+				<img src={tradeIcon} alt="trade arrow" class="rotate-180 w-6" />
+			</div>
+			<div class="flex w-2/5 items-center justify-center">testIds</div>
 		</div>
 	</div>
 </div>

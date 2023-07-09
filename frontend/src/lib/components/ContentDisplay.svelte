@@ -18,7 +18,7 @@
 		};
 		modalStore.trigger(modal);
 	}
-	let folder = false;
+	let folder = true;
 	function updateFolder() {
 		folder = !folder;
 	}
