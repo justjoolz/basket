@@ -10,6 +10,7 @@
 	} from '@skeletonlabs/skeleton';
 	import walletIcon from '$lib/assets/wallet-icon.svg';
 	import basketIcon from '$lib/assets/basket-icon.svg';
+	import tradeIcon from '$lib/assets/trade-arrow.svg';
 
 	import {
 		dictionaryToArray,
@@ -99,8 +100,8 @@
 	// $: console.log(currentVault);
 </script>
 
-<div class="flexColumnCenter">
-	<p class="text-[64px] leading-[160px] py-6 hero-text-outline">My Profile</p>
+<div class="flexColumnCenter pb-10">
+	<p class="text-[64px] leading-[160px] pt-6 hero-text-outline">My Profile</p>
 	<div class="flex justify-center items-start w-full">
 		<ContentDisplay title={'Wallet'} imgSrc={walletIcon} nfts={walletNFTs} fts={walletFTs} />
 		<ContentDisplay title={'Basket'} imgSrc={basketIcon} nfts={walletNFTs} fts={walletFTs} />
@@ -144,11 +145,21 @@
 		<!-- </div>
 		</div> -->
 	</div>
-	<div class="flex w-full justify-center items-center pb-6">
-		<button
-			class="btn variant-filled-primary font-bold"
-			on:click={() => modalComponentTrade('nfts')}
-			>Trade
-		</button>
+	<div class="flexColumnCenter w-full fixed bottom-0 bg-surface-900">
+		<div class="w-full h-2 flex px-[44px] gap-x-20">
+			<div class="border-t-2 border-primary-500 w-1/2" />
+			<div class="border-t-2 border-primary-500 w-1/2" />
+		</div>
+		<div
+			class="flex w-full justify-center items-center gap-x-5 py-8 hover:scale-105 transition-all duration-300"
+		>
+			<img src={tradeIcon} alt="trade arrow" class="w-6" />
+			<div>
+				<button class="text-2xl font-bold" on:click={() => modalComponentTrade('nfts')}
+					>TRADE</button
+				>
+			</div>
+			<img src={tradeIcon} alt="trade arrow" class="rotate-180 w-6" />
+		</div>
 	</div>
 </div>
