@@ -23,6 +23,10 @@
 	import WithdrawModal from '$lib/components/Modals/WithdrawModal.svelte';
 	import CreateBasketModal from '$lib/components/Modals/CreateBasketModal.svelte';
 	import DepositModal from '$lib/components/Modals/DepositModal.svelte';
+	import { logIn, unauthenticate } from '$lib/flow/actions.client';
+	import { user } from '$lib/flow/stores.client';
+	import WithdrawNft from '$lib/components/Modals/WithdrawNFT.svelte';
+	import WithdrawFtModal from '$lib/components/Modals/WithdrawFTModal.svelte';
 
 	const t: ToastSettings = {
 		message: 'menu opened'
@@ -43,6 +47,12 @@
 		withdraw: {
 			ref: WithdrawModal
 		},
+		withdrawNFT: {
+			ref: WithdrawNft
+		},
+		withdrawFT: {
+			ref: WithdrawFtModal
+		},
 		deposit: {
 			ref: DepositModal
 		},
@@ -60,9 +70,11 @@
 
 <AppShell>
 	<svelte:fragment slot="header"
-		><AppBar padding="px-10 py-6">
+		><AppBar padding="px-12 py-4 nav-shadow !bg-surface-900">
 			<svelte:fragment slot="lead">
-				<a href="/"><strong class="text-4xl">Basket</strong></a></svelte:fragment
+				<a href="/" class="flex items-start justify-start"
+					><strong class="text-4xl !leading-8">Basket</strong></a
+				></svelte:fragment
 			>
 			<!-- Slot: default -->
 			<div class=""><Navigation /></div>
@@ -76,17 +88,28 @@
 						</svg>
 					</span>
 				</button>
-				<a href="/profile">
-					<Avatar initials="JD" background="bg-primary-500" width="w-10" class="hidden md:block" />
-				</a></svelte:fragment
-			>
+				{#if $user.loggedIn}
+					<a href="/profile">
+						<button class="hidden md:block btn text-lg hover:variant-ringed-primary"
+							>{$user.addr}</button
+						></a
+					><button
+						class="hidden md:block text-lg btn hover:variant-ringed-primary"
+						on:click={unauthenticate}>Log Out</button
+					>
+				{:else}
+					<button class="hidden md:block btn text-lg hover:variant-ringed-primary" on:click={logIn}
+						>Log In
+					</button>
+				{/if}
+			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
 	<!-- (sidebarLeft) -->
 	<!-- (sidebarRight) -->
 	<!-- (pageHeader) -->
 	<!-- Router Slot -->
-	<div class="container p-10 mx-auto">
+	<div class="w-full">
 		<slot />
 	</div>
 	<!-- ---- / ---- -->
