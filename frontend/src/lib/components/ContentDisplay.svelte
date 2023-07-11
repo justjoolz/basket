@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { selectedBasketMeta } from '$lib/flow/stores.client';
-	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import { modalStore, type ModalSettings, TabGroup, Tab } from '@skeletonlabs/skeleton';
+	import topFolder from '$lib/assets/top-folder.png';
+	import ItemCard from './ItemCard.svelte';
 
 	export let nfts: NFTCatalogEntry[][];
 	export let fts: FTCatalogEntry[];
+	export let imgSrc: string;
+	export let title: string;
 
 	function modalComponentWithdrawNft(nft: NFTCatalogEntry): void {
 		const modal: ModalSettings = {
@@ -13,6 +17,10 @@
 			component: 'withdrawNFT'
 		};
 		modalStore.trigger(modal);
+	}
+	let folder = true;
+	function updateFolder() {
+		folder = !folder;
 	}
 
 	function modalComponentWithdrawFt(ft: FTCatalogEntry) {
@@ -28,49 +36,50 @@
 		};
 		modalStore.trigger(modal);
 	}
-
 	console.log(nfts, 'nfts');
 	console.log(fts, 'fts');
 </script>
 
-<div class="flex flex-col w-full h-full pb-14">
-	<div class="flex flex-col p-4 gap-y-4 w-full">
-		<h4 class="h4 font-bold">NFTs</h4>
-		{#each nfts as nftCollection}
-			<div class="flex flex-col border p-4 gap-y-2">
-				<p class="h3 font-bold">{nftCollection[0]?.collectionName}</p>
-				{#each nftCollection as nft}
-					<div class="flex items-center border rounded-md p-4 px-20 gap-x-6">
-						<div class="flex gap-x-4 items-center w-1/3">
-							<img src={nft.thumbnail} alt={nft.name} class="block h-12 w-auto" />
+<div class="flex flex-col h-full pb-14 px-10 w-1/2">
+	<div class="w-full flex items-center gap-x-3 pb-6 px-6">
+		<img src={imgSrc} alt="" class="w-8 pb-1" />
+		<p class="text-3xl font-b7">{title}</p>
+	</div>
+	<div class="border-l-2 border-b-2 border-primary-500 relative mt-4">
+		<img src={topFolder} alt="" class="w-full absolute -top-3" />
+		<div class="absolute -top-4 left-20 w-1/4 px-4 py-2">
+			<div class="flex w-full items-start justify-between">
+				<button class="hover:scale-[1.02] hover:text-primary-100 transition-all"
+					>{folder === true ? 'NFTs' : 'FTs'}</button
+				>
+				<button
+					class="pt-[10px] hover:scale-[1.02] hover:text-primary-100 transition-all"
+					on:click={updateFolder}
+				>
+					{folder === true ? 'FTs' : 'NFTs'}
+				</button>
+			</div>
+		</div>
+		<div class="w-full py-6 flex flex-col gap-y-4 border-r-2 border-primary-500 mt-8 min-h-[100vh]">
+			{#if folder === true}
+				{#each nfts as nftCollection}
+					<div>
+						<p class="h3 font-bold px-4">{nftCollection[0]?.collectionName}</p>
+						<div class="gridDisplay p-4">
+							{#each nftCollection as nft}
+								<ItemCard type="nft" {nft} location={title} />
+							{/each}
 						</div>
-						<div class="flex w-1/3">
-							<h4 class="h4 font-bold pb-2">{nft.name}</h4>
-						</div>
-						<button
-							class="btn variant-filled-primary font-bold ml-12"
-							on:click={() => modalComponentWithdrawNft(nft)}>Withdraw</button
-						>
 					</div>
 				{/each}
-			</div>
-		{/each}
-	</div>
-	<div class="flex flex-col p-4 gap-y-4 w-full">
-		<h4 class="h4 font-bold">FTs</h4>
-		{#each fts as ftCollection}
-			<div class="flex items-center border rounded-md p-4 px-20 gap-x-6">
-				<div class="flex items-center w-1/3">
-					<h4 class="h4 font-bold pr-3">{ftCollection.token}</h4>
+			{:else if folder === false}
+				<p class="h3 font-bold px-4">Fungible Tokens</p>
+				<div class="gridDisplay px-4">
+					{#each fts as ft}
+						<ItemCard type="ft" {ft} location={title} />
+					{/each}
 				</div>
-				<div class="flex w-1/3">
-					<p class="h4 font-bold pr-3">${ftCollection.balance}</p>
-				</div>
-				<button
-					class="btn variant-filled-primary font-bold ml-12"
-					on:click={() => modalComponentWithdrawFt(ftCollection)}>Withdraw</button
-				>
-			</div>
-		{/each}
+			{/if}
+		</div>
 	</div>
 </div>
