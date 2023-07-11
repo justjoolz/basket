@@ -27,6 +27,8 @@
 	import { user } from '$lib/flow/stores.client';
 	import WithdrawNft from '$lib/components/Modals/WithdrawNFT.svelte';
 	import WithdrawFtModal from '$lib/components/Modals/WithdrawFTModal.svelte';
+	import { onMount } from 'svelte';
+	import { setupFCL } from '$lib/flow/config.client';
 
 	const t: ToastSettings = {
 		message: 'menu opened'
@@ -60,6 +62,10 @@
 			ref: CreateBasketModal
 		}
 	};
+
+	onMount(() => {
+		setupFCL();
+	});
 </script>
 
 <Toast position="br" />

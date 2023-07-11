@@ -11,12 +11,15 @@ import { GET_BASKETS } from "./scripts/get_baskets";
 import { GET_BASKET_METADATA } from "./scripts/get_nft_metadata";
 import { PUBLIC_FLOW_NETWORK } from "$env/static/public";
 import { setupFCL } from "./config.client";
+import { browser } from "$app/environment";
 
 export const ssr = false;
 
 // set Svelte $user store to currentUser, 
 // so other components can access it
-fcl.currentUser.subscribe((data: CurrentUser) => user.set(data))
+if (browser) {
+    fcl.currentUser.subscribe((data: CurrentUser) => user.set(data))
+}
 
 // Lifecycle FCL Auth functions
 export const unauthenticate = () => fcl.unauthenticate()
@@ -456,8 +459,9 @@ function handleUserChange(user: CurrentUser) {
 }
 
 // Subscriptions ///////////////////////////////////////////////////
-user.subscribe(handleUserChange);
-
-// transactionStatus.subscribe((value) => {
-//     console.log('transactionStatus changed', { value });
-// });
+if (browser) {
+    user.subscribe(handleUserChange);
+    transactionStatus.subscribe((value) => {
+        console.log('transactionStatus changed', { value });
+    });
+}
