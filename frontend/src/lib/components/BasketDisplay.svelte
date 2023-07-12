@@ -4,20 +4,10 @@
 	import ItemCard from './ItemCard.svelte';
 	import { getBasketMetadata } from '$lib/flow/actions.client';
 	import { get } from 'svelte/store';
-	import ItemDisplay from './ItemDisplay.svelte';
 	import {
-		dictionaryToArray,
-		transactionStatus,
 		user,
-		usersNFTs,
-		usersFTs,
-		ftDictionaryToArray,
 		usersBasketIds,
 		selectedBasketMeta,
-		walletNFTWithdrawIds,
-		walletFTWithdrawIds,
-		basketNFTWithdrawIds,
-		basketFTWithdrawIds
 	} from '$lib/flow/stores.client';
 	import BasketCard from './BasketCard.svelte';
 
@@ -56,6 +46,7 @@
 		<div class="min-h-[100vh] py-6 px-4 border-r-2 border-primary-500 mt-8">
 			<div class="grid grid-cols-3 gap-5">
 				{#each userBaskets as basket}
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<div on:click={() => basketClick(basket.toString())}>
 						<BasketCard basketId={basket} />
 					</div>
