@@ -28,15 +28,10 @@
 	import WithdrawNft from '$lib/components/Modals/WithdrawNFT.svelte';
 	import WithdrawFtModal from '$lib/components/Modals/WithdrawFTModal.svelte';
 	import { onMount } from 'svelte';
-	import { setupFCL } from '$lib/flow/config.client';
-
-	const t: ToastSettings = {
-		message: 'menu opened'
-	};
+	import { setupFCL } from '$lib/flow/config.client';	
 
 	function drawerOpen() {
 		drawerStore.open();
-		toastStore.trigger(t);
 	}
 
 	const modalComponentRegistry: Record<string, ModalComponent> = {
@@ -70,7 +65,7 @@
 
 <Toast position="br" />
 <Modal width="w-full" components={modalComponentRegistry} />
-<Drawer>
+<Drawer position="right">
 	<Navigation />
 </Drawer>
 
@@ -83,7 +78,6 @@
 				></svelte:fragment
 			>
 			<!-- Slot: default -->
-			<div class=""><Navigation /></div>
 			<svelte:fragment slot="trail">
 				<button class="md:hidden btn btn-sm" on:click={drawerOpen}>
 					<span>
