@@ -17,17 +17,48 @@
 	let _basketFTWithdrawIds = get(basketFTWithdrawIds);
 
 	const isWallet = location === 'Wallet';
+	const isNFT = type === 'nft';
 
-	let isSelected: boolean = isWallet
-		? _walletNFTWithdrawIds.includes(nft.id) || _walletFTWithdrawIds.includes(ft.token)
-		: _basketNFTWithdrawIds.includes(nft.id) || _basketFTWithdrawIds.includes(ft.token);
-
-	function addOrRemoveId(id: number) {
-		isSelected = !isSelected;
-		if (!isSelected) {
-			walletNFTWithdrawIds.update((ids) => ids.filter((i) => i !== id));
+	let nftArray: number[] = [];
+	let ftArray: FTCatalogEntry[] = [];
+	if (isWallet) {
+		if (isNFT) {
+			nftArray = _walletNFTWithdrawIds;
 		} else {
+			ftArray = _walletFTWithdrawIds;
+		}
+	} else {
+		if (isNFT) {
+			nftArray = _basketNFTWithdrawIds;
+		} else {
+			ftArray = _basketFTWithdrawIds;
+		}
+	}
+
+	let isSelected: boolean = isNFT ? nftArray.includes(nft.id) : ftArray.includes(ft);
+
+	function addOrRemoveNFTId(id: number) {
+		isSelected = !isSelected;
+		if (!isSelected && isWallet) {
+			walletNFTWithdrawIds.update((ids) => ids.filter((i) => i !== id));
+		} else if (isSelected && isWallet) {
 			walletNFTWithdrawIds.update((ids) => [...ids, id]);
+		} else if (!isSelected && !isWallet) {
+			basketNFTWithdrawIds.update((ids) => ids.filter((i) => i !== id));
+		} else if (isSelected && !isWallet) {
+			basketNFTWithdrawIds.update((ids) => [...ids, id]);
+		}
+	}
+	function addOrRemoveFTToken(token: FTCatalogEntry) {
+		isSelected = !isSelected;
+		if (!isSelected && isWallet) {
+			walletFTWithdrawIds.update((tokens) => tokens.filter((t) => t !== token));
+		} else if (isSelected && isWallet) {
+			walletFTWithdrawIds.update((tokens) => [...tokens, token]);
+		} else if (!isSelected && !isWallet) {
+			basketFTWithdrawIds.update((tokens) => tokens.filter((t) => t !== token));
+		} else if (isSelected && !isWallet) {
+			basketFTWithdrawIds.update((tokens) => [...tokens, token]);
 		}
 	}
 </script>
@@ -36,7 +67,7 @@
 	class={`flex flex-col items-center justify-start bg-tertiary-900 rounded-md hoverShadow p-4 ${
 		isSelected && 'selectionCard'
 	}`}
-	on:click={() => addOrRemoveId(nft.id)}
+	on:click={() => (isNFT ? addOrRemoveNFTId(nft.id) : addOrRemoveFTToken(ft))}
 >
 	<span /><span /><span /><span />
 	<div class="flex flex-col h-full justify-between">

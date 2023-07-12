@@ -8,8 +8,6 @@
 		Tab,
 		toastStore
 	} from '@skeletonlabs/skeleton';
-	import walletIcon from '$lib/assets/wallet-icon.svg';
-	import basketIcon from '$lib/assets/basket-icon.svg';
 
 	import {
 		dictionaryToArray,
@@ -29,58 +27,14 @@
 	import { getBasketMetadata } from '$lib/flow/actions.client';
 	import { get } from 'svelte/store';
 	import TradeSection from '$lib/components/Trade/TradeSection.svelte';
-
-	function modalComponentDeposit(): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'deposit'
-		};
-		modalStore.trigger(modal);
-	}
-	function modalComponentCreateBasket(): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'createBasket'
-		};
-		modalStore.trigger(modal);
-	}
+	
 	function transactionStatusToast(transactionStatus: string): void {
 		const t = {
 			message: transactionStatus,
 			background: 'variant-filled-success'
 		};
 		toastStore.trigger(t);
-	}
-
-	let tabSet: number = 0;
-	let walletNFTs: NFTCatalogEntry[][];
-	let walletFTs: FTCatalogEntry[];
-	let userBaskets: NFTCatalogEntry[][] = [];
-	$: walletNFTs = dictionaryToArray($usersNFTs);
-	$: walletFTs = [...ftDictionaryToArray($usersFTs)];
-	$: console.log(walletFTs, 'walletFTs');
-
-	function modalComponentWithdrawNft(id: string): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			title: `Withdraw NFT ${id}`,
-			component: 'withdraw'
-		};
-		modalStore.trigger(modal);
-	}
-	function modalComponentWithdrawFt(name: string) {
-		const modal: ModalSettings = {
-			type: 'component',
-			title: `Withdraw FT ${name}`,
-			component: 'withdraw'
-		};
-		modalStore.trigger(modal);
 	}	
-
-	let vaults: NFTCatalogEntry[][];
-	$: vaults = dictionaryToArray($usersNFTs);
-	let currentTile: number = 1;
-	$: currentVault = vaults[currentTile - 1];
 
 	function basketClick(basket: string) {
 		return () => {
@@ -90,17 +44,15 @@
 	}
 
 	let traits: string;
-	$: traits = JSON.stringify($selectedBasketMeta.traits).split(',').join(',\n');
+	$: traits = JSON.stringify($selectedBasketMeta.traits)?.split(',').join(',\n');
 
-	// $: console.log(vaults);
-	// $: console.log(currentVault);
 </script>
 
 <div class="flexColumnCenter pb-10">
 	<p class="text-[64px] leading-[160px] pt-6 hero-text-outline">My Profile</p>
 	<div class="flex justify-center items-start w-full">
-		<ContentDisplay title={'Wallet'} imgSrc={walletIcon} nfts={walletNFTs} fts={walletFTs} />
-		<ContentDisplay title={'Basket'} imgSrc={basketIcon} nfts={walletNFTs} fts={walletFTs} />
+		<ContentDisplay pageTitle={'Wallet'} />
+		<ContentDisplay pageTitle={'Basket'} />
 
 		<!-- <div class="w-1/2 flex flex-col pl-6">
 			<div class="flex">
