@@ -75,7 +75,7 @@
 			component: 'withdraw'
 		};
 		modalStore.trigger(modal);
-	}	
+	}
 
 	let vaults: NFTCatalogEntry[][];
 	$: vaults = dictionaryToArray($usersNFTs);
@@ -99,6 +99,9 @@
 <div class="flexColumnCenter pb-10">
 	<p class="text-[64px] leading-[160px] pt-6 hero-text-outline">My Profile</p>
 	<div class="flex justify-center items-start w-full">
+		<button class="btn variant-filled-primary font-bold" on:click={modalComponentCreateBasket}
+			>create basket</button
+		>
 		<ContentDisplay title={'Wallet'} imgSrc={walletIcon} nfts={walletNFTs} fts={walletFTs} />
 		<ContentDisplay title={'Basket'} imgSrc={basketIcon} nfts={walletNFTs} fts={walletFTs} />
 
