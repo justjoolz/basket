@@ -4,11 +4,7 @@
 	import ItemCard from './ItemCard.svelte';
 	import { getBasketMetadata } from '$lib/flow/actions.client';
 	import { get } from 'svelte/store';
-	import {
-		user,
-		usersBasketIds,
-		selectedBasketMeta,
-	} from '$lib/flow/stores.client';
+	import { user, usersBasketIds, selectedBasketMeta } from '$lib/flow/stores.client';
 	import BasketCard from './BasketCard.svelte';
 
 	let nfts: NFTCatalogEntry[][];
@@ -19,10 +15,8 @@
 
 	function basketClick(basket: string) {
 		console.log('basket click');
-		
-		const basketMeta =	getBasketMetadata(get(user).addr ?? '', basket);
-			console.log(basketMeta);
-		
+
+		const basketMeta = getBasketMetadata(get(user).addr ?? '', basket);
 	}
 	function modalComponentCreateBasket(): void {
 		const modal: ModalSettings = {
@@ -34,6 +28,7 @@
 
 	let traits: string;
 	$: traits = JSON.stringify($selectedBasketMeta.traits)?.split(',').join(',\n');
+	$: console.log(traits);
 </script>
 
 <div class="flex flex-col h-full pb-14 px-10 w-1/2">
@@ -41,6 +36,7 @@
 		<img src={imgSrc} alt="" class="w-8 pb-1" />
 		<p class="text-3xl font-b7">{pageTitle}</p>
 	</div>
+	<pre>{traits}</pre>
 	<div class="border-l-2 border-b-2 border-primary-500 relative mt-4">
 		<img src={topFolder} alt="" class="w-full absolute -top-3" />
 		<div class="min-h-[100vh] py-6 px-4 border-r-2 border-primary-500 mt-8">
