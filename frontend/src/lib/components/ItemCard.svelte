@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { basketTxs } from '$lib/flow/actions.client';
 	import {
 		walletNFTWithdrawIds,
 		walletFTWithdrawIds,
 		basketNFTWithdrawIds,
-		basketFTWithdrawIds
+		basketFTWithdrawIds,
+		ftTokens
 	} from '$lib/flow/stores.client';
 	import { get } from 'svelte/store';
 
@@ -29,11 +31,22 @@
 			addOrRemoveId(id);
 		} else {
 			console.log('send data to modal, then fire tx', { type, ft, location });
-			if (location === 'Basket') addOrRemoveFT(id);
+			if (location === 'Basket') withdrawFT(id, ft);
+			else addOrRemoveFT(id, ft);
 		}
 	}
 
-	function addOrRemoveFT(id: number) {
+	function withdrawFT(id: number, ft: FTCatalogEntry) {
+		const storagePath = $ftTokens.find((token) => token.symbol === ft.token)?.path.vault;
+		console.log(storagePath, $ftTokens, ft.token);
+		if (!storagePath) throw new Error('No storage path found for FT');
+		// .storagePath;
+		const selectedBasketId = 0;
+		const amount = 0.00001;
+		basketTxs.withdrawFT(selectedBasketId.toString(), storagePath, amount.toString());
+	}
+
+	function addOrRemoveFT(id: number, ft: FTCatalogEntry) {
 		console.log('to do add or remove amount of ft');
 	}
 

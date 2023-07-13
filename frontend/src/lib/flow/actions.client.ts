@@ -237,19 +237,18 @@ export const basketTxs = {
         const cadence = `import "FungibleToken" 
         import "Basket" 
         
-        transaction(megaVaultID: UInt64, amount: UFix64) {
+        transaction(basketID: UInt64, amount: UFix64) {
         
             prepare(acct: AuthAccount) {
         
                 let vaultRef = acct.borrow<&FungibleToken.Vault>(from: ${storagePath})
-                ?? panic("Could not borrow reference to the owner's Vault @ /storage/".concat(storagePath))
+                ?? panic("Could not borrow reference to the owner's Vault @ ${storagePath}")
                 
-                basket.depositFungibleTokens(from: <- vaultRef.withdraw(amount: amount))
-                let megaVaults = acct.borrow<&Basket.Collection>(from: Basket.CollectionStoragePath) ?? panic("Could not borrow a reference to the owner's collection")
-                let megaVault = megaVaults.borrowBasket(id: megaVaultID) ?? panic("Could not borrow a reference to the owner's MegaVault")
+                let baskets = acct.borrow<&Basket.Collection>(from: Basket.CollectionStoragePath) ?? panic("Could not borrow a reference to the owner's collection")
+                let basket = baskets.borrowBasket(id: basketID) ?? panic("Could not borrow a reference to the owner's MegaVault")
                 
-                let tokens <- megaVault.withdrawFungibleTokens(identifier: vaultRef.getType().identifier, amount: amount) 
-                    ?? panic("Cannot withdraw tokens")
+                let tokens <- basket.withdrawFungibleTokens(identifier: vaultRef.getType().identifier, amount: amount) 
+                    
                 vaultRef.deposit(from: <- tokens)
             }
         }
@@ -260,7 +259,7 @@ export const basketTxs = {
         try {
             const txId = await fcl.mutate({
                 cadence: cadence,
-                args: (arg, t) => [arg(baskedId, t.UInt64), arg(storagePath, t.String), arg(amount, t.UFix64)]
+                args: (arg, t) => [arg(baskedId, t.UInt64), arg(amount, t.UFix64)]
             })
 
             fcl.tx(txId).subscribe(res => {
