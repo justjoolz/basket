@@ -43,6 +43,7 @@
 	"dependencies": {
 		"@onflow/fcl": "^1.4.1",
 		"@onflow/typedefs": "^1.1.0",
-		"@onflow/types": "^1.1.0"
+		"@onflow/types": "^1.1.0",
+		"flow-native-token-registry": "^0.1.4"
 	}
 }
