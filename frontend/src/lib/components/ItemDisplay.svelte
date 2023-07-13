@@ -10,33 +10,12 @@
 	export let imgSrc: string;
 	export let pageTitle: string;
 
-	function modalComponentWithdrawNft(nft: NFTCatalogEntry): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			title: `Withdraw NFT ${nft.id} ${nft.name} ${nft.collectionName}`,
-			meta: nft,
-			component: 'withdrawNFT'
-		};
-		modalStore.trigger(modal);
-	}
+	
 	let folder = true;
 	function updateFolder() {
 		folder = !folder;
 	}
-
-	function modalComponentWithdrawFt(ft: FTCatalogEntry) {
-		if ($selectedBasketMeta.id === undefined) {
-			alert('Please select a basket first');
-			return;
-		}
-		const modal: ModalSettings = {
-			type: 'component',
-			title: `Withdraw ${ft.token}`,
-			meta: ft,
-			component: 'withdrawFT'
-		};
-		modalStore.trigger(modal);
-	}
+	
 	console.log(nfts, 'nfts');
 	console.log(fts, 'fts');
 </script>

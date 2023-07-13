@@ -1,15 +1,7 @@
 <script lang="ts">
 	import Hero from '$lib/components/Hero.svelte';
 	import { modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
-	import infoImage from '$lib/assets/info-image.jpg';
-
-	function modalComponentSignIn(): void {
-		const modal: ModalSettings = {
-			type: 'component',
-			component: 'signIn'
-		};
-		modalStore.trigger(modal);
-	}
+	import infoImage from '$lib/assets/info-image.jpg';	
 </script>
 
 <Hero />
