@@ -14,14 +14,14 @@ export const selectedBasketMeta = writable({} as BasketNFTMeta);
 export const transactionStatus = writable();
 export const walletContents = writable();
 export const basket = writable();
-export const walletNFTWithdrawIds = writable([123] as number[]);
+export const walletNFTWithdrawIds = writable([] as number[]);
 export const walletFTWithdrawIds = writable([
-	{
-		token: 'USDC',
-		balance: 1
-	}
+	// {
+	// 	token: 'USDC',
+	// 	balance: 1
+	// }
 ] as FTCatalogEntry[]);
-export const basketNFTWithdrawIds = writable([456] as number[]);
+export const basketNFTWithdrawIds = writable([] as number[]);
 export const basketFTWithdrawIds = writable([
 	{
 		token: 'FLOW',

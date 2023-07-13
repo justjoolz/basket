@@ -233,6 +233,48 @@ export const basketTxs = {
         }
     },
 
+    withdrawFT: async (baskedId: string, storagePath: string, amount: string) => {
+        const cadence = `import "FungibleToken" 
+        import "Basket" 
+        
+        transaction(megaVaultID: UInt64, amount: UFix64) {
+        
+            prepare(acct: AuthAccount) {
+        
+                let vaultRef = acct.borrow<&FungibleToken.Vault>(from: ${storagePath})
+                ?? panic("Could not borrow reference to the owner's Vault @ /storage/".concat(storagePath))
+                
+                basket.depositFungibleTokens(from: <- vaultRef.withdraw(amount: amount))
+                let megaVaults = acct.borrow<&Basket.Collection>(from: Basket.CollectionStoragePath) ?? panic("Could not borrow a reference to the owner's collection")
+                let megaVault = megaVaults.borrowBasket(id: megaVaultID) ?? panic("Could not borrow a reference to the owner's MegaVault")
+                
+                let tokens <- megaVault.withdrawFungibleTokens(identifier: vaultRef.getType().identifier, amount: amount) 
+                    ?? panic("Cannot withdraw tokens")
+                vaultRef.deposit(from: <- tokens)
+            }
+        }
+        `
+        console.log({ cadence })
+        transactionStatus.set(`withdrawing ${amount} tokens from basket #${baskedId} to ${storagePath} `);
+
+        try {
+            const txId = await fcl.mutate({
+                cadence: cadence,
+                args: (arg, t) => [arg(baskedId, t.UInt64), arg(storagePath, t.String), arg(amount, t.UFix64)]
+            })
+
+            fcl.tx(txId).subscribe(res => {
+                transactionStatus.set(res.status)
+                console.log({ res })
+            })
+            transactionStatus.set('deposit succesful!')
+
+        } catch (e) {
+            transactionStatus.set(e)
+            console.log(e);
+        }
+    },
+
     depositNFTs: async (baskedId: string, storagePath: string, ids: string[], collectionName: string, address: string) => {
 
         const cadence = `

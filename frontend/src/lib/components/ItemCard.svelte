@@ -11,6 +11,7 @@
 	export let ft: any = {};
 	export let type: 'nft' | 'ft';
 	export let location: string;
+
 	let _walletNFTWithdrawIds = get(walletNFTWithdrawIds);
 	let _walletFTWithdrawIds = get(walletFTWithdrawIds);
 	let _basketNFTWithdrawIds = get(basketNFTWithdrawIds);
@@ -21,6 +22,20 @@
 	let isSelected: boolean = isWallet
 		? _walletNFTWithdrawIds.includes(nft.id) || _walletFTWithdrawIds.includes(ft.token)
 		: _basketNFTWithdrawIds.includes(nft.id) || _basketFTWithdrawIds.includes(ft.token);
+
+	function handleClick(id: number) {
+		if (type === 'nft') {
+			console.log('send data to modal, then fire tx', { type, nft, location });
+			addOrRemoveId(id);
+		} else {
+			console.log('send data to modal, then fire tx', { type, ft, location });
+			if (location === 'Basket') addOrRemoveFT(id);
+		}
+	}
+
+	function addOrRemoveFT(id: number) {
+		console.log('to do add or remove amount of ft');
+	}
 
 	function addOrRemoveId(id: number) {
 		isSelected = !isSelected;
@@ -36,7 +51,7 @@
 	class={`flex flex-col items-center justify-start bg-tertiary-900 rounded-md hoverShadow p-4 ${
 		isSelected && 'selectionCard'
 	}`}
-	on:click={() => addOrRemoveId(nft.id)}
+	on:click={() => handleClick(nft.id)}
 >
 	<span /><span /><span /><span />
 	<div class="flex flex-col h-full justify-between">
