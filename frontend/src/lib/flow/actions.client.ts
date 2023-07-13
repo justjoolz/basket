@@ -15,11 +15,6 @@ import { browser } from "$app/environment";
 
 export const ssr = false;
 
-// set Svelte $user store to currentUser, 
-// so other components can access it
-if (browser) {
-    fcl.currentUser.subscribe((data: CurrentUser) => user.set(data))
-}
 
 // Lifecycle FCL Auth functions
 export const unauthenticate = () => fcl.unauthenticate()
@@ -465,7 +460,7 @@ async function fetchUsersData() {
     await getBaskets(get(user).addr ?? '');
 }
 
-function handleUserChange(user: CurrentUser) {
+export function handleUserChange(user: CurrentUser) {
     console.log('currentUser changed', { user }, '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
     setupFCL()
     if (user?.loggedIn) {
@@ -528,12 +523,4 @@ function handleUserChange(user: CurrentUser) {
         });
         transactionStatus.set('logged out')
     }
-}
-
-// Subscriptions ///////////////////////////////////////////////////
-if (browser) {
-    user.subscribe(handleUserChange);
-    transactionStatus.subscribe((value) => {
-        console.log('transactionStatus changed', { value });
-    });
 }

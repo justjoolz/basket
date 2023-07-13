@@ -23,12 +23,15 @@
 	import WithdrawModal from '$lib/components/Modals/WithdrawModal.svelte';
 	import CreateBasketModal from '$lib/components/Modals/CreateBasketModal.svelte';
 	import DepositModal from '$lib/components/Modals/DepositModal.svelte';
-	import { logIn, unauthenticate } from '$lib/flow/actions.client';
-	import { user } from '$lib/flow/stores.client';
+	import { handleUserChange, logIn, unauthenticate } from '$lib/flow/actions.client';
+	import { transactionStatus, user } from '$lib/flow/stores.client';
 	import WithdrawNft from '$lib/components/Modals/WithdrawNFT.svelte';
 	import WithdrawFtModal from '$lib/components/Modals/WithdrawFTModal.svelte';
 	import { onMount } from 'svelte';
-	import { setupFCL } from '$lib/flow/config.client';	
+	import { setupFCL } from '$lib/flow/config.client';
+	import * as fcl from '@onflow/fcl';
+	import type { CurrentUser } from '@onflow/typedefs';
+	import { onDestroy } from 'svelte';
 
 	function drawerOpen() {
 		drawerStore.open();
@@ -58,8 +61,21 @@
 		}
 	};
 
+	let txUnsub: Function;
+	let userUnsub: Function;
+
 	onMount(() => {
 		setupFCL();
+		fcl.currentUser.subscribe((data: CurrentUser) => user.set(data));
+		userUnsub = user.subscribe(handleUserChange);
+		txUnsub = transactionStatus.subscribe((value) => {
+			console.log('transactionStatus changed', { value });
+		});
+	});
+
+	onDestroy(() => {
+		if (userUnsub) userUnsub();
+		if (txUnsub) txUnsub();
 	});
 </script>
 
