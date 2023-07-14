@@ -96,8 +96,8 @@ pub contract Basket: NonFungibleToken, ViewResolver {
             switch view {
                 case Type<MetadataViews.Display>():
                     return MetadataViews.Display(
-                        name: "MegaVault",
-                        description: "Basket is a NonFungibleToken that holds any number of NonFungibleTokens and FungibleTokens",
+                        name: "Basket",
+                        description: "Basket is a NonFungibleToken that holds any number of NonFungibleToken Collections and FungibleTokens Vaults",
                         thumbnail: MetadataViews.HTTPFile(
                             url: Basket.getThumbnailURL()
                         )
@@ -113,7 +113,7 @@ pub contract Basket: NonFungibleToken, ViewResolver {
                         self.id
                     )
                 case Type<MetadataViews.ExternalURL>():
-                    return MetadataViews.ExternalURL("https://basket.dev/".concat(self.id.toString()))
+                    return MetadataViews.ExternalURL("https://basket-sable.vercel.app/".concat(self.id.toString()))
                 case Type<MetadataViews.NFTCollectionData>():
                     return MetadataViews.NFTCollectionData(
                         storagePath: Basket.CollectionStoragePath,
@@ -129,18 +129,18 @@ pub contract Basket: NonFungibleToken, ViewResolver {
                 case Type<MetadataViews.NFTCollectionDisplay>():
                     let media = MetadataViews.Media(
                         file: MetadataViews.HTTPFile(
-                            url: "https://assets.website-files.com/5f6294c0c7a8cdd643b1c820/5f6294c0c7a8cda55cb1c936_Flow_Wordmark.svg"
+                            url: "https://basket-sable.vercel.app/_app/immutable/assets/basket-icon.41a9e902.svg"
                         ),
                         mediaType: "image/svg+xml"
                     )
                     return MetadataViews.NFTCollectionDisplay(
-                        name: "The Example Collection",
-                        description: "This collection is used as an example to help you develop your next Flow NFT.",
-                        externalURL: MetadataViews.ExternalURL("https://example-nft.onflow.org"),
+                        name: "Basket Collection",
+                        description: "Basket NFT Collection.",
+                        externalURL: MetadataViews.ExternalURL("https://basket-sable.vercel.app/"),
                         squareImage: media,
                         bannerImage: media,
                         socials: {
-                            "twitter": MetadataViews.ExternalURL("https://twitter.com/flow_blockchain")
+                            "twitter": MetadataViews.ExternalURL("https://twitter.com/__basket__")
                         }
                     )
                 case Type<MetadataViews.Traits>():
@@ -384,7 +384,7 @@ pub contract Basket: NonFungibleToken, ViewResolver {
             case Type<MetadataViews.NFTCollectionDisplay>():
                 let media = MetadataViews.Media(
                     file: MetadataViews.HTTPFile(
-                        url: "https://assets.website-files.com/5f6294c0c7a8cdd643b1c820/5f6294c0c7a8cda55cb1c936_Flow_Wordmark.svg"
+                        url: "https://basket-sable.vercel.app/_app/immutable/assets/basket-icon.41a9e902.svg"
                     ),
                     mediaType: "image/svg+xml"
                 )
@@ -405,7 +405,7 @@ pub contract Basket: NonFungibleToken, ViewResolver {
     }
 
     pub fun getThumbnailURL(): String {
-        return "https://assets.website-files.com/5f6294c0c7a8cdd643b1c820/5f6294c0c7a8cda55cb1c936_Flow_Wordmark.svg"
+        return "https://basket-sable.vercel.app/_app/immutable/assets/basket-icon.41a9e902.svg"
     }
 
     init() {
