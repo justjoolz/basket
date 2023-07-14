@@ -72,6 +72,7 @@ type NFTCatalogEntry = {
 
 type FTCatalogEntry = {
 	token: string;
+	name: string;
 	balance: number;
 };
 

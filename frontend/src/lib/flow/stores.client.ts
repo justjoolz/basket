@@ -7,6 +7,8 @@ export const ssr = false;
 export const user = writable({} as CurrentUser);
 export const usersNFTs = writable({} as NFTCatalogEntries);
 export const ftTokens = writable({} as TokenInfo[]);
+export const nftCatalog = writable({} as NFTCatalogEntries);
+
 export const usersFTs = writable({} as { token: string; balance: number }[]);
 export const usersBasketIds = writable([] as number[]);
 export const selectedBasketMeta = writable({} as BasketNFTMeta);

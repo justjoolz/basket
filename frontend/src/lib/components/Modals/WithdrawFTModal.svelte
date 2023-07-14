@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { basketTxs, fetchBasketMetadata, fetchTokenBalances } from '$lib/flow/actions.client';
-	import { basket, ftTokens, selectedBasketMeta, user } from '$lib/flow/stores.client';
+	import { basketTxs, fetchBasketMetadata } from '$lib/flow/actions.client';
+	import { ftTokens, selectedBasketMeta } from '$lib/flow/stores.client';
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import type { TokenInfo } from 'flow-native-token-registry';
-	import { get } from 'svelte/store';
 
 	export let parent: any;
 
