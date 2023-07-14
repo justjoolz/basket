@@ -43,17 +43,6 @@
 		modalStore.trigger(modal);
 	}
 
-	function handleClick(id: number) {
-		if (type === 'nft') {
-			console.log('send data to modal, then fire tx', { type, nft, location });
-			addOrRemoveId(id);
-		} else {
-			console.log('send data to modal, then fire tx', { type, ft, location });
-			if (location === 'Basket') withdrawFT(id, ft);
-			else addOrRemoveFT(id, ft);
-		}
-	}
-
 	function withdrawFT(id: number, ft: FTCatalogEntry) {
 		const storagePath = $ftTokens.find((token) => token.symbol === ft.token)?.path.vault;
 		console.log(storagePath, $ftTokens, ft.token);
@@ -130,7 +119,7 @@
 		} else {
 			addOrRemoveFTToken(ft);
 		}
-	}
+	}	
 
 	function convertUrl(url: string) {
 		if (url.startsWith('ipfs://')) {
