@@ -50,20 +50,18 @@
 </script>
 
 <button
-	class={`flex flex-col items-center justify-start bg-tertiary-900 rounded-md hoverShadow p-4`}
+	class={`flex flex-col items-center justify-start bg-tertiary-900 rounded-md hoverShadow p-2 sm:p-4`}
 	on:click={() => (isNFT ? addOrRemoveNFTId(nft.id) : addOrRemoveFTToken(ft))}
 >
-	<span /><span /><span /><span />
-	<div class="flex flex-col h-full justify-between">
+	<div class="flex flex-col justify-between p-3">
 		<div class="flex flex-col items-center w-full">
 			{#if type === 'nft'}
-				<h4>{nft.name}</h4>
+				<p class="text-xs sm:text-sm">{nft.name}</p>
 				<p class="text-sm pt-3 text-center">{JSON.stringify(nft.ids)}</p>
 			{:else if type === 'ft'}
-				<h4>{ft.name}</h4>
+				<p class="text-xs sm:text-sm">{ft.name}</p>
 				<p class="text-sm pt-1 text-center">{ft.balance}</p>
 			{/if}
 		</div>
-		<!-- <button class="font-bold">Deposit</button> -->
 	</div>
 </button>

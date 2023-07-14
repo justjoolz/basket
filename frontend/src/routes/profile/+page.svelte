@@ -48,10 +48,10 @@
 </script>
 
 <div class="flexColumnCenter pb-10">
-	<p class="text-[64px] leading-[160px] pt-6 hero-text-outline">My Profile</p>
-	<div class="flex justify-center items-start w-full">
+	<p class="text-3xl leading-[60px] sm:text-5xl sm:leading-[140px] lg:text-[64px] lg:leading-[160px] py-6 hero-text-outline">My Profile</p>
+	<div class="flex flex-col lg:flex-row justify-center items-start w-full">
 		<ContentDisplay pageTitle={'Wallet'} />
 		<ContentDisplay pageTitle={'Basket'} />
 	</div>
-	<TradeSection />
+	<!-- <TradeSection /> -->
 </div>

@@ -26,6 +26,9 @@
 	<button class="btn-icon variant-filled {cButton}" on:click={parent.onClose}>X</button>
 	<div class="card flex flex-col items-center variant-filled-tertiary py-20 px-32">
 		<h1 class="pb-4 text-xl">{$modalStore[0].title}</h1>
+		<h4 class="pb-4 text-xl">
+			Depositing to basket #{$selectedBasketMeta.id}
+		</h4>
 		<button on:click={withdrawBtnClick} class="btn variant-filled-primary font-bold"
 			>Withdraw</button
 		>

@@ -99,9 +99,7 @@
 </script>
 
 <button
-	class={`flex flex-col items-center justify-start bg-tertiary-900 rounded-md hoverShadow p-4 ${
-		isSelected && 'selectionCard'
-	}`}
+	class={`flex flex-col items-center justify-start bg-tertiary-900 rounded-md hoverShadow p-4 `}
 	on:click={handleClick}
 >
 	<div class="flex flex-col h-full justify-between">
