@@ -24,7 +24,7 @@
 		basketFTWithdrawIds
 	} from '$lib/flow/stores.client';
 	import ContentDisplay from '$lib/components/ContentDisplay.svelte';
-	import { getBasketMetadata } from '$lib/flow/actions.client';
+	import { fetchBasketMetadata } from '$lib/flow/actions.client';
 	import { get } from 'svelte/store';
 	import TradeSection from '$lib/components/Trade/TradeSection.svelte';
 
@@ -38,7 +38,7 @@
 
 	function basketClick(basket: string) {
 		return () => {
-			getBasketMetadata(get(user).addr ?? '', basket);
+			fetchBasketMetadata(get(user).addr ?? '', basket);
 			console.log(basket);
 		};
 	}

@@ -12,7 +12,7 @@
 	export let nft: any = {};
 	export let ft: any = {};
 	export let type: 'nft' | 'ft';
-	const isNFT = type === 'nft';	
+	const isNFT = type === 'nft';
 
 	function modalComponentWithdrawNft(nft: NFTCatalogEntry): void {
 		const modal: ModalSettings = {
@@ -35,15 +35,16 @@
 			component: 'withdrawFT'
 		};
 		modalStore.trigger(modal);
-	}	
+	}
 
 	function addOrRemoveNFTId(nft: any) {
-		modalComponentWithdrawNft(nft);		
+		modalComponentWithdrawNft(nft);
 	}
 	function addOrRemoveFTToken(ft: FTCatalogEntry) {
-		modalComponentWithdrawFt(ft);		
+		modalComponentWithdrawFt(ft);
 	}
 
+	$: console.log(ft);
 </script>
 
 <button
@@ -57,7 +58,7 @@
 				<p class="text-sm pt-3 text-center">{nft.name}</p>
 			{:else if type === 'ft'}
 				<h4>{ft.name}</h4>
-				<p class="text-sm pt-1 text-center">{ft}</p>
+				<p class="text-sm pt-1 text-center">{ft.balance}</p>
 			{/if}
 		</div>
 		<!-- <button class="font-bold">Deposit</button> -->

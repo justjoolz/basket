@@ -84,7 +84,7 @@ export const getBaskets = async (addr: String) => {
 }
 
 
-export const getBasketMetadata = async (addr: String, nftId: String) => {
+export const fetchBasketMetadata = async (addr: String, nftId: String) => {
     if (!addr) { return }
     transactionStatus.set(`Reading your Basket metadata... ${addr} - ${nftId}`);
 
@@ -99,7 +99,7 @@ export const getBasketMetadata = async (addr: String, nftId: String) => {
 
         // usersNFTs.set(nfts ?? 'No NFTs found');
         transactionStatus.set(`Basket ${nftId} metadata loaded.`)
-
+        return selectedBasketMeta
     } catch (e) {
         transactionStatus.set(e)
         console.log(e);

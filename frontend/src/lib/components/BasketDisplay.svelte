@@ -2,7 +2,7 @@
 	import { modalStore, type ModalSettings, TabGroup, Tab } from '@skeletonlabs/skeleton';
 	import topFolder from '$lib/assets/top-folder.png';
 	import ItemCard from './ItemCard.svelte';
-	import { getBasketMetadata } from '$lib/flow/actions.client';
+	import { fetchBasketMetadata } from '$lib/flow/actions.client';
 	import { get } from 'svelte/store';
 	import { user, usersBasketIds, selectedBasketMeta } from '$lib/flow/stores.client';
 	import BasketCard from './BasketCard.svelte';
@@ -22,7 +22,7 @@
 	function basketClick(basket: string) {
 		selectedBasketId = basket;
 		isBasketSelected = true;
-		const basketMeta = getBasketMetadata(get(user).addr ?? '', basket);
+		fetchBasketMetadata(get(user).addr ?? '', basket);
 	}
 	function modalComponentCreateBasket(): void {
 		const modal: ModalSettings = {
@@ -32,21 +32,36 @@
 		modalStore.trigger(modal);
 	}
 
-	$: userBaskets = get(usersBasketIds);
-
-	let traits: string;
-	$: traits = JSON.stringify($selectedBasketMeta.traits)?.split(',').join(',\n');
-	$: dataString = `${JSON.stringify($selectedBasketMeta.traits)?.split(',').join(',\n')}`;
-	$: data = JSON.parse(dataString);
-
 	$: {
-		nfts = data.traits.filter((trait) =>
-			['Non-Fungible Token with IDs', 'Non-Fungible Token Collections'].includes(trait.name)
-		);
-
-		fts = data.traits.filter((trait) =>
-			['Fungible Token Balances', 'Fungible Tokens'].includes(trait.name)
-		);
+		let ftNames =
+			$selectedBasketMeta.traits.traits.find((trait: any) => trait.name === 'Fungible Tokens')
+				?.value ?? [];
+		let ftBalances =
+			$selectedBasketMeta.traits.traits.find(
+				(trait: any) => trait.name === 'Fungible Token Balances'
+			)?.value ?? [];
+		let nftCollections =
+			$selectedBasketMeta.traits.traits.find(
+				(trait: any) => trait.name === 'Non-FungibleToken Collections'
+			)?.value ?? [];
+		let nftIds =
+			$selectedBasketMeta.traits.traits.find(
+				(trait: any) => trait.name === 'Non-FungibleToken with IDs'
+			)?.value ?? [];
+		console.log({ ftNames, ftBalances }, { nftCollections, nftIds });
+		fts = ftNames.map((name: string, i: number) => {
+			return {
+				name,
+				balance: ftBalances[name]
+			};
+		});
+		nfts = nftCollections.map((name: string, i: number) => {
+			return {
+				name,
+				id: nftIds[i]
+			};
+		});
+		console.log({ fts, nfts });
 	}
 </script>
 
@@ -69,14 +84,13 @@
 			{/if}
 		</div>
 	</div>
-	<pre>{traits}</pre>
 
 	<div class="border-l-2 border-b-2 border-primary-500 relative mt-4">
 		<img src={topFolder} alt="" class="w-full absolute -top-3" />
 		<div class="min-h-[100vh] py-6 px-4 border-r-2 border-primary-500 mt-8">
 			{#if !isBasketSelected}
 				<div class="grid grid-cols-3 gap-5">
-					{#each userBaskets as basket}
+					{#each $usersBasketIds as basket}
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<div on:click={() => basketClick(basket.toString())}>
 							<BasketCard basketId={basket} />

@@ -24,9 +24,9 @@ export function dictionaryToArray(dictionary: any) {
 }
 export function ftDictionaryToArray(dictionary: any) {
 	const objectArray = Object.keys(dictionary).map((key) => dictionary[key]) as FTCatalogEntry[];
-	console.log('objectArray', objectArray);
+	// console.log('objectArray', objectArray);
 
 	const filteredArray = objectArray.filter((item) => item.balance > 0);
-	console.log('fitleredArray', filteredArray);
+	// console.log('fitleredArray', filteredArray);
 	return filteredArray;
 }
