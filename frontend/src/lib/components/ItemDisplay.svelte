@@ -25,10 +25,15 @@
 		<p class="text-3xl font-b7">{pageTitle}</p>
 	</div>
 	<div class="border-l-2 border-b-2 border-primary-500 relative mt-4">
-		<img src={topFolder} alt="" class="w-full absolute top-[-2.4%] sm:top-[-3.5%] md:top-[-4.5%] lg:top-[-0.8%] xl:top-[-1.2%]" />
+		<img
+			src={topFolder}
+			alt=""
+			class="w-full absolute top-[-2.4%] sm:top-[-3.5%] md:top-[-4.5%] lg:top-[-0.8%] xl:top-[-1.2%]"
+		/>
 		<div class="absolute top-[-4.7%] lg:top-[-1.5%] left-[10%] w-[22%] py-2">
 			<div class="flex w-full items-start justify-between">
-				<button class="hover:scale-[1.02] text-xs md:text-base lg:text-xs xl:text-base !leading-none hover:text-primary-100 transition-all"
+				<button
+					class="hover:scale-[1.02] text-xs md:text-base lg:text-xs xl:text-base !leading-none hover:text-primary-100 transition-all"
 					>{folder === true ? 'NFTs' : 'FTs'}</button
 				>
 				<button
@@ -44,14 +49,16 @@
 		>
 			{#if folder === true}
 				{#each nfts as nftCollection}
-					<div>
-						<p class="h3 font-bold px-4">{nftCollection[0]?.collectionName}</p>
-						<div class="gridDisplay p-4">
-							{#each nftCollection as nft}
-								<ItemCard type="nft" {nft} location={pageTitle} />
-							{/each}
+					{#if nftCollection[0]?.collectionName !== undefined}
+						<div>
+							<p class="h3 font-bold px-4">{nftCollection[0]?.collectionName}</p>
+							<div class="gridDisplay p-4">
+								{#each nftCollection as nft}
+									<ItemCard type="nft" {nft} location={pageTitle} />
+								{/each}
+							</div>
 						</div>
-					</div>
+					{/if}
 				{/each}
 			{:else if folder === false}
 				<p class="h3 font-bold px-4">Fungible Tokens</p>

@@ -96,6 +96,14 @@
 			addOrRemoveFTToken(ft);
 		}
 	}
+
+	function convertUrl(url: string) {
+		if (url.startsWith('ipfs://')) {
+			const ipfsGateway = 'https://ipfs.io';
+			return `${ipfsGateway}/ipfs/${url.slice(7)}`;
+		}
+		return url;
+	}
 </script>
 
 <button
@@ -105,7 +113,7 @@
 	<div class="flex flex-col h-full justify-between">
 		<div class="flex flex-col items-center w-full">
 			{#if type === 'nft'}
-				<img src={nft.thumbnail} alt={nft.name} class="h-12" />
+				<img src={convertUrl(nft.thumbnail)} alt={nft.name} class="h-12" />
 				<p class="text-sm pt-3 text-center">{nft.name}</p>
 			{:else if type === 'ft'}
 				<h4>{ft.token}</h4>
