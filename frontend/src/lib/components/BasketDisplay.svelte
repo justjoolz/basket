@@ -75,6 +75,7 @@
 						class="flexRowCenter w-6 h-6 btn-icon text-sm btn-sm variant-filled-error absolute -top-3 -right-7"
 						on:click={() => {
 							isBasketSelected = false;
+							selectedBasketId = '';
 						}}>x</button
 					>
 				</div>

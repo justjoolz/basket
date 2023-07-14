@@ -21,11 +21,14 @@
 	import CardModal from '$lib/components/Modals/CardModal.svelte';
 	import SignInModal from '$lib/components/Modals/SignInModal.svelte';
 	import WithdrawModal from '$lib/components/Modals/WithdrawModal.svelte';
+	// import WithdrawFTModal from '$lib/components/Modals/WithdrawFTModal.svelte';
+	import WithdrawNFTModal from '$lib/components/Modals/WithdrawNFTModal.svelte';
 	import CreateBasketModal from '$lib/components/Modals/CreateBasketModal.svelte';
 	import DepositModal from '$lib/components/Modals/DepositModal.svelte';
+	import DepositFTModal from '$lib/components/Modals/DepositFTModal.svelte';
+	import DepositNFTModal from '$lib/components/Modals/DepositNFTModal.svelte';
 	import { handleUserChange, logIn, unauthenticate } from '$lib/flow/actions.client';
 	import { transactionStatus, user } from '$lib/flow/stores.client';
-	import WithdrawNft from '$lib/components/Modals/WithdrawNFT.svelte';
 	import WithdrawFtModal from '$lib/components/Modals/WithdrawFTModal.svelte';
 	import { onMount } from 'svelte';
 	import { setupFCL } from '$lib/flow/config.client';
@@ -44,20 +47,23 @@
 		signIn: {
 			ref: SignInModal
 		},
+		createBasket: {
+			ref: CreateBasketModal
+		},
 		withdraw: {
 			ref: WithdrawModal
 		},
 		withdrawNFT: {
-			ref: WithdrawNft
+			ref: WithdrawNFTModal
 		},
 		withdrawFT: {
 			ref: WithdrawFtModal
 		},
-		deposit: {
-			ref: DepositModal
+		depositFT: {
+			ref: DepositFTModal
 		},
-		createBasket: {
-			ref: CreateBasketModal
+		depositNFT: {
+			ref: DepositNFTModal
 		}
 	};
 
