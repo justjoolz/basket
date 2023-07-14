@@ -1,5 +1,17 @@
 <script>
 	import { logIn } from '$lib/flow/actions.client';
+	import { user } from '$lib/flow/stores.client';
+	import { goto } from '$app/navigation';
+
+	function getStarted() {
+		if ($user.loggedIn) {		
+			goto('/profile');
+		} else {
+			logIn().then(() => {
+				goto('/profile');
+			});
+		}
+	}
 </script>
 
 <div class="h-full mx-auto flex justify-start items-center hero-back relative">
@@ -31,8 +43,6 @@
 			</div>
 			<div class="text-2xl lg:text-5xl xl:text-6xl">all in one place</div>
 		</div>
-		<a href="/"
-			><button class="btn-7 custom-btn" on:click={logIn}><span>Get started now</span></button></a
-		>
+		<button class="btn-7 custom-btn" on:click={getStarted}><span>Get started now</span></button>
 	</div>
 </div>

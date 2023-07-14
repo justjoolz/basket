@@ -8,7 +8,7 @@
 
 {#if $modalStore[0]}
 	<button class="btn-icon variant-filled {cButton}" on:click={parent.onClose}>X</button>
-	<div class="card variant-filled-tertiary py-20 px-32">
+	<div class="card variant-filled-tertiary p-10 sm:p-16 md:py-20 md:px-32">
 		<button class="btn variant-filled-primary font-bold">Deposit</button>
 	</div>
 {/if}
