@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { basketTxs, fetchTokenBalances } from '$lib/flow/actions.client';
+	import { basketTxs, fetchBasketMetadata, fetchTokenBalances } from '$lib/flow/actions.client';
 	import { basket, ftTokens, selectedBasketMeta, user } from '$lib/flow/stores.client';
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import type { TokenInfo } from 'flow-native-token-registry';
@@ -16,8 +16,10 @@
 	let withdrawBtnClick = () => {
 		const storagePath = token?.path.vault ?? '';
 		if (!storagePath) return;
+
 		basketTxs.depositFT($selectedBasketMeta.id, storagePath, amount.toString());
 		parent.onClose();
+		fetchBasketMetadata($selectedBasketMeta.id);
 	};
 
 	const cButton = 'fixed top-6 right-6 z-50 font-bold shadow-xl';

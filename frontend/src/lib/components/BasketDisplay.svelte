@@ -11,9 +11,6 @@
 
 	let nfts: any[] = [];
 	let fts: any[] = [];
-	let data = {};
-	let dataString: string = '';
-	let userBaskets: number[];
 	let isBasketSelected: boolean = false;
 	let selectedBasketId: string = '';
 	export let imgSrc: string;
@@ -22,7 +19,7 @@
 	function basketClick(basket: string) {
 		selectedBasketId = basket;
 		isBasketSelected = true;
-		fetchBasketMetadata(get(user).addr ?? '', basket);
+		fetchBasketMetadata(selectedBasketId);
 	}
 	function modalComponentCreateBasket(): void {
 		const modal: ModalSettings = {
@@ -42,11 +39,11 @@
 			)?.value ?? [];
 		let nftCollections =
 			$selectedBasketMeta.traits.traits.find(
-				(trait: any) => trait.name === 'Non-FungibleToken Collections'
+				(trait: any) => trait.name === 'Non-Fungible Token Collections'
 			)?.value ?? [];
 		let nftIds =
 			$selectedBasketMeta.traits.traits.find(
-				(trait: any) => trait.name === 'Non-FungibleToken with IDs'
+				(trait: any) => trait.name === 'Non-Fungible Token with IDs'
 			)?.value ?? [];
 		console.log({ ftNames, ftBalances }, { nftCollections, nftIds });
 		fts = ftNames.map((name: string, i: number) => {
@@ -58,7 +55,7 @@
 		nfts = nftCollections.map((name: string, i: number) => {
 			return {
 				name,
-				id: nftIds[i]
+				ids: nftIds[name]
 			};
 		});
 		console.log({ fts, nfts });

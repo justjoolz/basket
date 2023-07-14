@@ -38,7 +38,7 @@
 
 	function basketClick(basket: string) {
 		return () => {
-			fetchBasketMetadata(get(user).addr ?? '', basket);
+			fetchBasketMetadata(basket);
 			console.log(basket);
 		};
 	}

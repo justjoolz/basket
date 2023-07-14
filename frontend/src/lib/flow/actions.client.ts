@@ -84,7 +84,8 @@ export const getBaskets = async (addr: String) => {
 }
 
 
-export const fetchBasketMetadata = async (addr: String, nftId: String) => {
+export const fetchBasketMetadata = async (nftId: String) => {
+    const addr = get(user).addr
     if (!addr) { return }
     transactionStatus.set(`Reading your Basket metadata... ${addr} - ${nftId}`);
 
@@ -281,11 +282,11 @@ export const basketTxs = {
     },
 
     // deposit multiple nfts from a single collection
-    depositNFTs: async (baskedId: string, storagePath: string, ids: string[], collectionName: string, address: string) => {
+    depositNFTs: async (baskedId: string, storagePath: string, ids: string[], contractName: string, address: string) => {
         const cadence = `
         import NonFungibleToken from 0xNonFungibleToken
         import Basket from 0xBasket
-        import ${collectionName} from ${address}
+        import ${contractName} from ${address}
         
         transaction(basketID: UInt64, storagePath: String, ids: [UInt64], address: Address) {
             
@@ -296,9 +297,9 @@ export const basketTxs = {
                 let collectionRef = acct.borrow<&NonFungibleToken.Collection>(from: StoragePath(identifier: storagePath)!)
                 ?? panic("Could not borrow reference to the owner's collection @ /storage/".concat(storagePath))
                 
-                // let contract = getAccount(address).contracts.borrow<&${collectionName}.Collection>(name: "${collectionName}")
+                // let contract = getAccount(address).contracts.borrow<&${contractName}.Collection>(name: "${contractName}")
 
-                let emptyCollection <- ${collectionName}.createEmptyCollection()
+                let emptyCollection <- ${contractName}.createEmptyCollection()
 
                 for id in ids {
                     let nft <- collectionRef.withdraw(withdrawID: id)

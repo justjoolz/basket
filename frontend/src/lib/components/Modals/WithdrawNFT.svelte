@@ -14,10 +14,10 @@
 		console.log({ ids });
 		console.log({ $selectedBasketMeta }, $selectedBasketMeta.id);
 		console.log({ nft });
-		let collectionName = nft.collectionName;
+		let contractName = nft.privateLinkedType.type.type.typeID.split('.')[2];
 		let address = '0x' + nft.privateLinkedType.type.type.typeID.split('.')[1];
 		console.log(address);
-		basketTxs.depositNFTs($selectedBasketMeta.id, storagePath, ids, collectionName, address);
+		basketTxs.depositNFTs($selectedBasketMeta.id, storagePath, ids, contractName, address);
 		parent.onClose();
 	};
 </script>
