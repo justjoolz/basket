@@ -32,14 +32,12 @@
 {#if $modalStore[0]}
 	<button class="btn-icon variant-filled {cButton}" on:click={parent.onClose}>X</button>
 	<div class="card flex flex-col items-center variant-filled-tertiary py-20 px-32">
-		<pre>
-			{JSON.stringify(token).split(',').join(',\n')}
-		</pre>
-		<h1 class="pb-4 text-xl">{$modalStore[0].title}</h1>
-		<input type="number" class="input" placeholder="Amount" bind:value={amount} />
-		<h2>
-			Depositing to basked #{$selectedBasketMeta.id}
-		</h2>
+		<h1 class="pb-4 text-2xl font-bold">{$modalStore[0].title}</h1>
+		<h4 class="pb-4 text-xl">Please select the amount you want to withdraw</h4>
+		<input type="number" class="input mb-4" placeholder="Amount" bind:value={amount} />
+		<h4 class="pb-4 text-xl">
+			Depositing to basket #{$selectedBasketMeta.id}
+		</h4>
 		<button class="btn variant-filled-primary font-bold" on:click={withdrawBtnClick}
 			>Withdraw {amount} / {ft.balance} {ft.token}</button
 		>

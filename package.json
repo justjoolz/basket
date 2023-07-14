@@ -1,9 +1,0 @@
-{
-  "devDependencies": {
-    "@types/node": "^20.3.3"
-  },
-  "dependencies": {
-    "flow-catalog": "^0.2.1",
-    "flow-native-token-registry": "^0.1.4"
-  }
-}

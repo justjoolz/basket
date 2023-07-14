@@ -16,5 +16,3 @@ export const setupFCL = () => {
         // "0xBasket": network === "testnet" ? "0xca909b58fecc185a" : "0xNotYetDeployed"
     }).load({ flowJSON: flowJSON })
 }
-
-setupFCL()

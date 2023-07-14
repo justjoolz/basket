@@ -1,22 +1,34 @@
 <script>
-	import { drawerStore, toastStore } from '@skeletonlabs/skeleton';
+    import { logIn, unauthenticate } from '$lib/flow/actions.client';
+    import { user } from '$lib/flow/stores.client';
+    import { drawerStore, toastStore } from '@skeletonlabs/skeleton';
+    function drawerClose() {
+        drawerStore.close();
+    }
 
-	const t = {
-		message: 'menu closed',
-		background: 'variant-filled-success'
-	};
-
-	function drawerClose() {
-		drawerStore.close();
-		toastStore.trigger(t);
-	}
+    function drawerOpen() {
+        drawerStore.open();
+    }
 </script>
 
-<nav class="list-nav">
-	<ul class="flex items-center justify-center flex-col md:flex-row ">
-		<!-- <li><a href="/?test=1" on:click={drawerClose}>Other Page 1</a></li>
-		<li><a href="/?test=2" on:click={drawerClose}>Other Page 2</a></li>
-		<li><a href="/?test=3" on:click={drawerClose}>Other Page 3</a></li> -->
-	</ul>
-</nav>
-
+<div class="flex flex-col items-end py-6 px-2 relative">
+    <div class="flex pl-8 absolute left-0">
+        <button
+            type="button"
+            on:click={drawerClose}
+            class="btn-icon variant-filled font-bold font-b9 text-lg text-primary-500"
+            ><span class="pt-[2px]">X</span></button
+        >
+    </div>
+    {#if $user.loggedIn}
+        <button class="btn text-lg">{$user.addr}</button>
+        <a href="/profile" on:click={drawerClose}>
+            <button class=" btn text-lg hover:variant-ringed-primary">Profile</button>
+        </a>
+        <button class=" text-lg btn hover:variant-ringed-primary" on:click={unauthenticate}
+            >Log Out
+        </button>
+    {:else}
+        <button class="btn text-lg hover:variant-ringed-primary" on:click={logIn}>Log In</button>
+    {/if}
+</div>
