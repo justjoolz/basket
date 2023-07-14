@@ -113,7 +113,7 @@ pub contract Basket: NonFungibleToken, ViewResolver {
                         self.id
                     )
                 case Type<MetadataViews.ExternalURL>():
-                    return MetadataViews.ExternalURL("https://basket-sable.vercel.app/".concat(self.id.toString()))
+                    return MetadataViews.ExternalURL("https://basket-sable.vercel.app/")
                 case Type<MetadataViews.NFTCollectionData>():
                     return MetadataViews.NFTCollectionData(
                         storagePath: Basket.CollectionStoragePath,
