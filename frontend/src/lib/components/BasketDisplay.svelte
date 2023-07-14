@@ -99,7 +99,7 @@
 					</div>
 				</div>
 			{:else}
-				<div class="grid xl:grid-cols-2 gap-5">
+				<div class="gridDisplay2">
 					{#each nfts as nft}
 						<BasketItemCard type="nft" {nft} />
 					{/each}

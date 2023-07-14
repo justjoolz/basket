@@ -43,8 +43,15 @@
 	function addOrRemoveFTToken(ft: FTCatalogEntry) {
 		modalComponentWithdrawFt(ft);
 	}
+	function extractNameFromId(id: string): string {
+		return id.split('.')[2];
+	}
+	function reduceDecimalsToTwo(amount: string) {
+		return amount.slice(0, amount.length - 6);		
+	}
 
-	$: console.log(ft);
+
+	$: console.log(ft, 'ft');
 	$: console.log(nft);
 	$: console.log($selectedBasketMeta);
 </script>
@@ -56,11 +63,11 @@
 	<div class="flex flex-col justify-between p-3">
 		<div class="flex flex-col items-center w-full">
 			{#if type === 'nft'}
-				<p class="text-xs sm:text-sm">{nft.name}</p>
+				<p class="text-xs sm:text-sm">{extractNameFromId(nft.name)}</p>
 				<p class="text-sm pt-3 text-center">{JSON.stringify(nft.ids)}</p>
 			{:else if type === 'ft'}
-				<p class="text-xs sm:text-sm">{ft.name}</p>
-				<p class="text-sm pt-1 text-center">{ft.balance}</p>
+				<p class="text-xs sm:text-sm">{extractNameFromId(ft.name)}</p>
+				<p class="text-sm pt-1 text-center">{reduceDecimalsToTwo(ft.balance)}</p>
 			{/if}
 		</div>
 	</div>
