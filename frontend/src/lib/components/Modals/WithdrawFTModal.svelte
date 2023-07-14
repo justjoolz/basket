@@ -12,14 +12,8 @@
 	let amount: number = 0;
 
 	$: token = $ftTokens.find((token) => token.symbol === ft.token);
-	$: console.log(token, 'token');
 
 	let withdrawBtnClick = () => {
-		console.log({ $selectedBasketMeta }, $selectedBasketMeta.id, 'selectedBasketMeta.id');
-		if ($selectedBasketMeta.id === undefined) {
-			alert('Please select a basket first');
-			return;
-		}
 		const storagePath = token?.path.vault ?? '';
 		if (!storagePath) return;
 		basketTxs.depositFT($selectedBasketMeta.id, storagePath, amount.toString());
@@ -39,7 +33,7 @@
 			Depositing to basket #{$selectedBasketMeta.id}
 		</h4>
 		<button class="btn variant-filled-primary font-bold" on:click={withdrawBtnClick}
-			>Withdraw {amount} / {ft.balance} {ft.token}</button
+			>Withdraw {amount} / {ft.balance}</button
 		>
 	</div>
 {/if}

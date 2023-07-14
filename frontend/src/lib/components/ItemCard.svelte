@@ -31,10 +31,6 @@
 		modalStore.trigger(modal);
 	}
 	function modalComponentWithdrawFt(ft: FTCatalogEntry) {
-		if ($selectedBasketMeta.id === undefined) {
-			alert('Please select a basket first');
-			return;
-		}
 		const modal: ModalSettings = {
 			type: 'component',
 			title: `Withdraw ${ft.token}`,
@@ -88,15 +84,26 @@
 			basketFTWithdrawIds.update((tokens) => [...tokens, token]);
 		}
 	}
+
+	function handleClick() {
+		if (!$selectedBasketMeta.id) {
+			alert('Please select a basket first');
+			return;
+		}
+		if (isNFT) {
+			addOrRemoveNFTId(nft.id);
+		} else {
+			addOrRemoveFTToken(ft);
+		}
+	}
 </script>
 
 <button
 	class={`flex flex-col items-center justify-start bg-tertiary-900 rounded-md hoverShadow p-4 ${
 		isSelected && 'selectionCard'
 	}`}
-	on:click={() => (isNFT ? addOrRemoveNFTId(nft.id) : addOrRemoveFTToken(ft))}
+	on:click={handleClick}
 >
-	<span /><span /><span /><span />
 	<div class="flex flex-col h-full justify-between">
 		<div class="flex flex-col items-center w-full">
 			{#if type === 'nft'}
