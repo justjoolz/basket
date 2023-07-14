@@ -28,9 +28,11 @@
 		<img
 			src={topFolder}
 			alt=""
-			class="w-full absolute top-[-2.4%] sm:top-[-3.5%] md:top-[-4.5%] lg:top-[-0.8%] xl:top-[-1.2%]"
+			class="w-full absolute top-[-6px] sm:top-[-8px] md:top-[-12px] lg:top-[-7px] xl:top-[-12px]"
 		/>
-		<div class="absolute top-[-4.7%] lg:top-[-1.5%] left-[10%] w-[22%] py-2">
+		<div
+			class="absolute top-[-10px] sm:top-[-10px] md:top-[-13px] lg:top-[-12px] xl:top-[-15px] left-[10%] w-[22%] py-2"
+		>
 			<div class="flex w-full items-start justify-between">
 				<button
 					class="hover:scale-[1.02] text-xs md:text-base lg:text-xs xl:text-base !leading-none hover:text-primary-100 transition-all"
@@ -45,7 +47,7 @@
 			</div>
 		</div>
 		<div
-			class="w-full py-8 lg:py-6 flex flex-col gap-y-4 border-r-2 border-primary-500 mt-[3.6%] lg:min-h-[100vh]"
+			class="w-full py-8 lg:py-6 flex flex-col gap-y-4 border-r-2 border-primary-500 mt-[4%] sm:mt-[24px] md:mt-[32px] lg:mt-[20px] xl:mt-[29px] lg:min-h-[100vh]"
 		>
 			{#if folder === true}
 				{#each nfts as nftCollection}
@@ -61,11 +63,13 @@
 					{/if}
 				{/each}
 			{:else if folder === false}
-				<p class="h3 font-bold px-4">Fungible Tokens</p>
-				<div class="gridDisplay px-4">
-					{#each fts as ft}
-						<ItemCard type="ft" {ft} location={pageTitle} />
-					{/each}
+				<div>
+					<p class="h3 font-bold px-4">Fungible Tokens</p>
+					<div class="gridDisplay p-4">
+						{#each fts as ft}
+							<ItemCard type="ft" {ft} location={pageTitle} />
+						{/each}
+					</div>
 				</div>
 			{/if}
 		</div>

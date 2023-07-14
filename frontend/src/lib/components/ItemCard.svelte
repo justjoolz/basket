@@ -117,7 +117,7 @@
 				<p class="text-sm pt-3 text-center">{nft.name}</p>
 			{:else if type === 'ft'}
 				<h4>{ft.token}</h4>
-				<p class="text-sm pt-1 text-center">{ft.balance}</p>
+				<p class="text-sm pt-3 text-center">{ft.balance}</p>
 			{/if}
 		</div>
 		<!-- <button class="font-bold">Deposit</button> -->

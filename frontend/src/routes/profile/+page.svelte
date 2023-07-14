@@ -47,11 +47,17 @@
 	$: traits = JSON.stringify($selectedBasketMeta.traits)?.split(',').join(',\n');
 </script>
 
-<div class="flexColumnCenter pb-10">
-	<p class="text-3xl leading-[60px] sm:text-5xl sm:leading-[140px] lg:text-[64px] lg:leading-[160px] py-6 hero-text-outline">My Profile</p>
-	<div class="flex flex-col lg:flex-row justify-center items-start w-full">
-		<ContentDisplay pageTitle={'Wallet'} />
-		<ContentDisplay pageTitle={'Basket'} />
+<div class="w-full">
+	<div class="flexColumnCenter pb-10 max-w-[1920px] mx-auto">
+		<p
+			class="text-3xl leading-[60px] sm:text-5xl sm:leading-[140px] lg:text-[64px] lg:leading-[160px] py-6 hero-text-outline"
+		>
+			My Profile
+		</p>
+		<div class="flex flex-col lg:flex-row justify-center items-start w-full">
+			<ContentDisplay pageTitle={'Wallet'} />
+			<ContentDisplay pageTitle={'Basket'} />
+		</div>
+		<!-- <TradeSection /> -->
 	</div>
-	<!-- <TradeSection /> -->
 </div>

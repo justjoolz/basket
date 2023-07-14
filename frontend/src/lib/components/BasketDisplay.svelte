@@ -84,7 +84,7 @@
 	</div>
 
 	<div class="border-l-2 border-b-2 border-primary-500 relative mt-4">
-		<img src={topFolder} alt="" class="w-full absolute top-[-0.3%] sm:top-[-0.9%] md:top-[-2.1%] lg:top-[-0.8%] xl:top-[-1.2%]" />
+		<img src={topFolder} alt="" class="w-full absolute top-[-6px] sm:top-[-8px] md:top-[-12px] lg:top-[-7px] xl:top-[-12px]" />
 		<div class="lg:min-h-[100vh] min-h-[50vh] py-10 lg:py-6 px-4 border-r-2 border-primary-500 mt-[3.6%]">
 			{#if !isBasketSelected}
 				<div class="gridDisplay2">
