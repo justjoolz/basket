@@ -36,6 +36,36 @@
 		toastStore.trigger(t);
 	}
 
+	let tabSet: number = 0;
+	let walletNFTs: NFTCatalogEntry[][];
+	let walletFTs: FTCatalogEntry[];
+	let userBaskets: NFTCatalogEntry[][] = [];
+	$: walletNFTs = dictionaryToArray($usersNFTs);
+	$: walletFTs = [...ftDictionaryToArray($usersFTs)];
+	$: console.log(walletFTs, 'walletFTs');
+
+	function modalComponentWithdrawNft(id: string): void {
+		const modal: ModalSettings = {
+			type: 'component',
+			title: `Withdraw NFT ${id}`,
+			component: 'withdraw'
+		};
+		modalStore.trigger(modal);
+	}
+	function modalComponentWithdrawFt(name: string) {
+		const modal: ModalSettings = {
+			type: 'component',
+			title: `Withdraw FT ${name}`,
+			component: 'withdraw'
+		};
+		modalStore.trigger(modal);
+	}
+
+	let vaults: NFTCatalogEntry[][];
+	$: vaults = dictionaryToArray($usersNFTs);
+	let currentTile: number = 1;
+	$: currentVault = vaults[currentTile - 1];
+
 	function basketClick(basket: string) {
 		return () => {
 			fetchBasketMetadata(basket);
