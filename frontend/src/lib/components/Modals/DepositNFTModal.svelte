@@ -8,6 +8,12 @@
 	const cButton = 'fixed top-6 right-6 z-50 font-bold shadow-xl';
 
 	const depositBtnClick = () => {
+		if (!selectedIds.length) {
+			alert(
+				'please select which nft ids you want to withdraw from the basket and desposit in your accounts'
+			);
+			return;
+		}
 		let FQI = $modalStore[0].meta.name; // as NFTCatalogEntry;
 
 		const contractName = FQI.split('.')[2];
@@ -31,14 +37,38 @@
 
 		// console.log({ contractName, address });
 
-		basketTxs.withdrawNFTs($selectedBasketMeta.id, storagePath, ids, contractName, contractAddress);
+		basketTxs.withdrawNFTs(
+			$selectedBasketMeta.id,
+			storagePath,
+			selectedIds,
+			contractName,
+			contractAddress
+		);
 		parent.onClose();
 	};
+
+	let selectedIds: string[] = [];
+
+	function toggleId(id: string) {
+		const index = selectedIds.indexOf(id);
+		if (index === -1) {
+			selectedIds = [...selectedIds, id];
+		} else {
+			selectedIds = selectedIds.filter((i) => i !== id);
+		}
+	}
 </script>
 
 {#if $modalStore[0]}
 	<button class="btn-icon variant-filled {cButton}" on:click={parent.onClose}>X</button>
 	<div class="card variant-filled-tertiary py-20 px-32">
+		<h2>Select the ids you wish to withdraw:</h2>
+		{#each $modalStore[0].meta.ids as id}
+			<li>
+				{id}
+				<input type="checkbox" on:click={() => toggleId(id)} />
+			</li>
+		{/each}
 		<button class="btn variant-filled-primary font-bold" on:click={depositBtnClick}>Deposit</button>
 	</div>
 {/if}
