@@ -63,7 +63,7 @@
 		}
 	},
 	"accounts": {
-		"testnet-admin=account": {
+		"testnet-admin": {
 			"address": "0xca909b58fecc185a"
 		},
 		"mainnet-admin": {
@@ -72,7 +72,7 @@
 	},
 	"deployments": {
 		"testnet": {
-			"testnet-admin-account": [
+			"testnet-admin": [
 				"Basket"
 			]
 		},
